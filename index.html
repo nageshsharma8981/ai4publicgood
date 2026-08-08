@@ -1,5 +1,6 @@
 <title>The Load Ledger · Who Pays for Big AI's Energy Demand?</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AI for Public Good — evidence on the AI that adds grid load vs the AI that removes it, plus a digital twin that models a fair data-centre deal for your grid.">
 <style>
   :root{
     --bg:#F2F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
@@ -232,6 +233,51 @@
   .btn:hover{filter:brightness(1.05)}
   .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
+  /* digital twin */
+  .twin{display:grid;grid-template-columns:minmax(300px,5fr) minmax(320px,6fr);gap:1rem;align-items:start}
+  @media (max-width:860px){.twin{grid-template-columns:1fr}}
+  .twin-col{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:1.4rem 1.5rem}
+  .twin-col h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:0 0 1.1rem}
+  .ctl{margin-bottom:1.15rem}
+  .ctl:last-child{margin-bottom:0}
+  .ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:.85rem;color:var(--ink);margin-bottom:.35rem;gap:1rem}
+  .ctl label output{font-family:var(--mono);font-size:.8rem;color:var(--rem-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ctl input[type=range]{width:100%;accent-color:var(--rem);height:22px}
+  .ctl.adds-ctl input[type=range]{accent-color:var(--adds)}
+  .ctl.adds-ctl label output{color:var(--adds-ink)}
+  .ctl .hint{font-size:.72rem;color:var(--ink3);margin-top:.15rem;font-family:var(--mono)}
+  .seg{display:flex;gap:.4rem}
+  .seg button{flex:1;font-family:var(--mono);font-size:.74rem;padding:.5rem .6rem;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .twin-divider{border:none;border-top:1px solid var(--line);margin:1.2rem 0}
+  .gauge{margin-bottom:1rem}
+  .gauge-bar{display:flex;gap:3px;height:14px;border-radius:7px;overflow:hidden}
+  .gauge-bar .g-adds{background:var(--adds)}
+  .gauge-bar .g-rem{background:var(--rem)}
+  .gauge-cap{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-top:.4rem}
+  .verdict{display:inline-block;font-family:var(--mono);font-size:.74rem;padding:.35rem .8rem;border-radius:999px;margin:.2rem 0 1rem}
+  .verdict.v0{background:var(--adds-soft);color:var(--adds-ink);border:1px solid var(--adds-line)}
+  .verdict.v1{background:var(--surface2);color:var(--ink2);border:1px solid var(--line)}
+  .verdict.v2{background:var(--rem-soft);color:var(--rem-ink);border:1px solid var(--rem-line)}
+  .tstats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .9rem;margin-bottom:1rem}
+  .tstat{border:1px solid var(--line);border-radius:8px;padding:.6rem .8rem}
+  .tstat .tk{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+  .tstat .tv{font-family:var(--serif);font-weight:600;font-size:1.25rem;font-variant-numeric:tabular-nums;line-height:1.2}
+  .tstat.a .tv{color:var(--adds-ink)} .tstat.r .tv{color:var(--rem-ink)}
+  .score{display:grid;gap:.4rem;margin-bottom:1.1rem}
+  .score-row{display:flex;align-items:center;gap:.6rem;font-size:.83rem;color:var(--ink2);padding:.4rem .6rem;border:1px solid var(--line);border-radius:8px}
+  .score-row .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;background:var(--ink3)}
+  .score-row.ok .dot{background:var(--rem)} .score-row.ok{color:var(--ink)}
+  .score-row.auto .tagx{margin-left:auto;font-family:var(--mono);font-size:.62rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
+  .score-row input[type=checkbox]{accent-color:var(--rem);width:16px;height:16px;margin:0}
+  .termsheet{display:none;margin-top:1rem}
+  .termsheet.show{display:block}
+  .termsheet pre{white-space:pre-wrap;font-family:var(--mono);font-size:.74rem;line-height:1.6;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;color:var(--ink2);max-height:340px;overflow:auto}
+  .assump{font-size:.8rem;color:var(--ink3);margin-top:1rem}
+  .assump summary{cursor:pointer;font-family:var(--mono);font-size:.72rem}
+  .assump ul{margin:.5rem 0 0;padding-left:1.1rem}
+
   .return-pill{position:fixed;right:1.25rem;bottom:1.25rem;z-index:30;font-family:var(--mono);font-size:.74rem;padding:.6rem 1rem;border-radius:999px;border:1px solid var(--rem-line);background:var(--rem-soft);color:var(--rem-ink);cursor:pointer;box-shadow:var(--shadow);display:none}
   .return-pill.show{display:block}
   .return-pill:hover{filter:brightness(1.04)}
@@ -288,6 +334,7 @@
     <a href="#evidence">Evidence</a>
     <a href="#pays">Who pays</a>
     <a href="#india">India lens</a>
+    <a href="#twin">Digital twin</a>
     <a href="#principles">Principles</a>
     <span class="spacer"></span>
     <button id="themeBtn" type="button" aria-label="Toggle theme">◐ theme</button>
@@ -423,9 +470,97 @@
   </div>
 </section>
 
+<section id="twin">
+  <div class="wrap">
+    <span class="sec-num">05 · Digital twin</span>
+    <h2>Model the deal, not just the debate</h2>
+    <p class="sec-sub">A working twin of an AI-infrastructure deal. Configure a hypothetical data centre for your region, then build the load-removal portfolio that would balance it — using per-unit coefficients from the deployments in the evidence base. Regulators can stress-test an interconnection request, communities can quantify "who pays", and operators can draft a public-benefit commitment.</p>
+
+    <div class="twin">
+      <div class="twin-col" id="twinInputs">
+        <h3>The deal on the table</h3>
+        <div class="ctl">
+          <label for="regionSeg">Host grid profile</label>
+          <div class="seg" id="regionSeg" role="group" aria-label="Host grid profile">
+            <button type="button" data-region="india" aria-pressed="true">India utility</button>
+            <button type="button" data-region="mature" aria-pressed="false">Mature grid</button>
+          </div>
+        </div>
+        <div class="ctl adds-ctl">
+          <label for="inMW">Data-centre capacity <output id="outMW">300 MW</output></label>
+          <input type="range" id="inMW" min="10" max="1000" step="10" value="300">
+        </div>
+        <div class="ctl adds-ctl">
+          <label for="inLF">Load factor <output id="outLF">80%</output></label>
+          <input type="range" id="inLF" min="60" max="95" step="1" value="80">
+          <div class="hint">data centres draw near-constant power</div>
+        </div>
+        <hr class="twin-divider">
+        <h3>The load-removal portfolio</h3>
+        <div class="ctl">
+          <label for="inBld">Buildings under AI optimisation <output id="outBld">1 000</output></label>
+          <input type="range" id="inBld" min="0" max="8000" step="100" value="1000">
+          <div class="hint">≈0.26 GWh saved per building·yr — casebook cases 10–12</div>
+        </div>
+        <div class="ctl">
+          <label for="inLoss">Distribution-loss points recovered <output id="outLoss">1.0 pt</output></label>
+          <input type="range" id="inLoss" min="0" max="10" step="0.5" value="1">
+          <div class="hint">AI grid mapping &amp; forecasting — cases 3, 4, 6</div>
+        </div>
+        <div class="ctl">
+          <label for="inFlex">Flexible demand under AI control <output id="outFlex">50 MW</output></label>
+          <input type="range" id="inFlex" min="0" max="500" step="10" value="50">
+          <div class="hint">depots, HVAC fleets, demand response — case 8, Voltalis</div>
+        </div>
+      </div>
+
+      <div class="twin-col" id="twinOutputs">
+        <h3>What the twin computes</h3>
+        <div class="gauge" aria-hidden="true">
+          <div class="gauge-bar"><div class="g-adds" id="gAdds"></div><div class="g-rem" id="gRem"></div></div>
+          <div class="gauge-cap"><span>load added</span><span id="gaugePct">—</span><span>load removed</span></div>
+        </div>
+        <span class="verdict v1" id="verdict" role="status">—</span>
+        <div class="tstats">
+          <div class="tstat a"><div class="tk">Facility demand</div><div class="tv" id="tAdd">—</div></div>
+          <div class="tstat a"><div class="tk">Household equivalents</div><div class="tv" id="tHH">—</div></div>
+          <div class="tstat r"><div class="tk">Portfolio removes</div><div class="tv" id="tRem">—</div></div>
+          <div class="tstat r"><div class="tk">Emissions avoided</div><div class="tv" id="tCO2">—</div></div>
+        </div>
+        <h3>Principles scorecard</h3>
+        <div class="score" id="score">
+          <div class="score-row auto" id="sc-net"><span class="dot"></span>Net-load responsibility<span class="tagx">computed</span></div>
+          <div class="score-row auto" id="sc-flex"><span class="dot"></span>Flexibility at scale<span class="tagx">computed</span></div>
+          <label class="score-row"><input type="checkbox" id="sc-add"><span class="dot"></span>Additionality: operator procures new clean supply</label>
+          <label class="score-row"><input type="checkbox" id="sc-cost"><span class="dot"></span>Cost causation: dedicated tariff, no ratepayer recovery</label>
+          <label class="score-row"><input type="checkbox" id="sc-local"><span class="dot"></span>Local benefit: heat reuse, water stewardship, community fund</label>
+          <label class="score-row"><input type="checkbox" id="sc-size"><span class="dot"></span>Right-sized models for the workload</label>
+          <label class="score-row"><input type="checkbox" id="sc-meter"><span class="dot"></span>Public facility-level metering</label>
+        </div>
+        <div class="actions" style="margin-top:0">
+          <button class="btn primary" id="tsBtn" type="button">Generate term sheet</button>
+          <button class="btn" id="tsCopy" type="button" hidden>Copy</button>
+        </div>
+        <div class="termsheet" id="termsheet"><pre id="tsText"></pre></div>
+        <details class="assump">
+          <summary>Model assumptions (illustrative — replace with your utility's data)</summary>
+          <ul>
+            <li>Facility energy = MW × 8 760 h × load factor. Peak ≈ nameplate MW.</li>
+            <li>India profile: ~1 200 kWh/household·yr, grid factor 0.71 tCO₂/MWh, utility throughput 20 TWh/yr, AT&amp;C losses mid-teens. Mature profile: ~9 500 kWh/household·yr, 0.35 tCO₂/MWh, 30 TWh/yr, losses ~6%.</li>
+            <li>Building lever: 1.2 GWh/building·yr average use × 22% AI savings (casebook cases 10–12, SISAB, Infosys). Peak: 0.05 MW shed per building.</li>
+            <li>Loss lever: 1 percentage point recovered = 1% of utility throughput (cases 3 &amp; 6).</li>
+            <li>Flexibility lever counts against peak, not energy (case 8, Voltalis).</li>
+            <li>This is a policy-illustration model, not an engineering study. Coefficients are self-reported deployment figures from the IEA Casebook (CC BY 4.0).</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="principles">
   <div class="wrap">
-    <span class="sec-num">05 · Expected output</span>
+    <span class="sec-num">06 · Expected output</span>
     <h2>Fair Energy and Public-Benefit Principles for AI Infrastructure</h2>
     <p class="sec-sub">A draft for the board's consideration. Each principle is anchored either in the deployment evidence (teal) or in the practices under review (amber).</p>
 
@@ -485,7 +620,7 @@
     <p><strong>Sources.</strong> IEA &amp; IndiaAI Mission, <em>Casebook on AI in Energy</em> (Feb 2026, CC BY 4.0) — 15 case studies selected from 72 submissions by an inter-ministerial committee (MNRE, Ministry of Power, MeitY) and the IEA. IEA, <em>Energy and AI</em> (2025) and the IEA Energy and AI Observatory. Google 2025 Environmental Report (fuel-efficient routing estimate).</p>
     <p><strong>Method note.</strong> Per the casebook's disclaimer, case-study figures are self-reported by the deploying organisations and were screened, not independently audited. Session premises ("who pays" mechanisms) are the framing supplied for this board's review, not IEA findings. Data-centre and savings projections are IEA analysis.</p>
     <p>Prepared as an evidence briefing for the IRB · Energy session, 12 August · Palais des Nations. Expected output: Fair Energy and Public-Benefit Principles for AI Infrastructure.</p>
-    <p>Presenter tip: keys <strong>1–5</strong> jump between sections.</p>
+    <p>Presenter tip: keys <strong>1–6</strong> jump between sections.</p>
   </div>
 </footer>
 
@@ -690,6 +825,99 @@ if(prevB){
   cardsEl.addEventListener('scroll',updateSnav,{passive:true});
 }
 
+/* digital twin */
+const REGIONS={
+  india:{name:'India distribution utility', hhKwh:1200, ef:0.71, throughputGWh:20000, lossMaxPts:10},
+  mature:{name:'Mature grid', hhKwh:9500, ef:0.35, throughputGWh:30000, lossMaxPts:2}
+};
+let region='india';
+const $=id=>document.getElementById(id);
+const fmt=n=>Intl.NumberFormat('en-US').format(Math.round(n));
+const fmt1=n=>n>=100?fmt(n):(Math.round(n*10)/10).toLocaleString('en-US');
+function twinState(){
+  const R=REGIONS[region];
+  const mw=+$('inMW').value, lf=+$('inLF').value/100;
+  const bld=+$('inBld').value, lossPts=+$('inLoss').value, flex=+$('inFlex').value;
+  const addGWh=mw*8760*lf/1000;
+  const remGWh=bld*0.26 + lossPts/100*R.throughputGWh;
+  const flexMW=flex + bld*0.05;
+  return {R,mw,lf,bld,lossPts,flex,addGWh,remGWh,flexMW,
+    hh:addGWh*1e6/R.hhKwh, co2Add:addGWh*1000*R.ef/1e6, co2Rem:remGWh*1000*R.ef/1e6,
+    ratio:addGWh>0?remGWh/addGWh:0, flexRatio:mw>0?flexMW/mw:0};
+}
+function twinRender(){
+  if(!$('inMW')) return;
+  const s=twinState();
+  $('outMW').textContent=fmt(s.mw)+' MW';
+  $('outLF').textContent=Math.round(s.lf*100)+'%';
+  $('outBld').textContent=fmt(s.bld);
+  $('outLoss').textContent=fmt1(s.lossPts)+' pt'+(s.lossPts===1?'':'s');
+  $('outFlex').textContent=fmt(s.flex)+' MW';
+  $('inLoss').max=s.R.lossMaxPts;
+  const total=s.addGWh+s.remGWh||1;
+  $('gAdds').style.width=(s.addGWh/total*100)+'%';
+  $('gRem').style.width=(s.remGWh/total*100)+'%';
+  $('gaugePct').textContent='portfolio offsets '+Math.round(Math.min(9.99,s.ratio)*100)+'%';
+  $('tAdd').textContent=fmt(s.addGWh)+' GWh/yr';
+  $('tHH').textContent='≈ '+fmt(s.hh)+' homes';
+  $('tRem').textContent=fmt(s.remGWh)+' GWh/yr';
+  $('tCO2').textContent=(s.co2Rem>=1?fmt1(s.co2Rem)+' Mt':fmt(s.co2Rem*1000)+' kt')+' CO₂/yr';
+  const v=$('verdict');
+  let cls,txt;
+  if(s.ratio>=1){cls='v2';txt='Net-load neutral capable — the deal balances';}
+  else if(s.ratio>=0.6){cls='v2';txt='Approaching balance — '+Math.round(s.ratio*100)+'% offset';}
+  else if(s.ratio>=0.25){cls='v1';txt='Partial offset — '+Math.round(s.ratio*100)+'% · portfolio too small';}
+  else {cls='v0';txt='Net-adding — ratepayers and communities absorb the balance';}
+  v.className='verdict '+cls; v.textContent=txt;
+  $('sc-net').classList.toggle('ok',s.ratio>=1);
+  $('sc-flex').classList.toggle('ok',s.flexRatio>=0.5);
+  document.querySelectorAll('#score input[type=checkbox]').forEach(cb=>cb.closest('.score-row').classList.toggle('ok',cb.checked));
+}
+if($('inMW')){
+  ['inMW','inLF','inBld','inLoss','inFlex'].forEach(id=>$(id).addEventListener('input',twinRender));
+  document.querySelectorAll('#score input[type=checkbox]').forEach(cb=>cb.addEventListener('change',twinRender));
+  document.querySelectorAll('#regionSeg button').forEach(b=>b.addEventListener('click',()=>{
+    region=b.dataset.region;
+    document.querySelectorAll('#regionSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    if(+$('inLoss').value>REGIONS[region].lossMaxPts) $('inLoss').value=REGIONS[region].lossMaxPts;
+    twinRender();
+  }));
+  $('tsBtn').addEventListener('click',()=>{
+    const s=twinState();
+    const checks={ 'sc-add':'Additionality: operator procures new clean generation matching facility demand',
+      'sc-cost':'Cost causation: connection financed via dedicated tariff class — no recovery from general ratepayers',
+      'sc-local':'Local benefit: waste-heat reuse, water stewardship and a community energy fund in the host region',
+      'sc-size':'Right-sizing: efficiency-per-outcome standards for models run in the facility',
+      'sc-meter':'Transparency: public facility-level metering of electricity, water and verified load removed'};
+    const committed=Object.keys(checks).filter(k=>$(k).checked).map(k=>'  • '+checks[k]);
+    const missing=Object.keys(checks).filter(k=>!$(k).checked).map(k=>'  • '+checks[k].split(':')[0]);
+    const lines=[
+'FAIR ENERGY & PUBLIC-BENEFIT TERM SHEET (draft)','',
+'Host grid: '+s.R.name,
+'Facility: '+fmt(s.mw)+' MW at '+Math.round(s.lf*100)+'% load factor → '+fmt(s.addGWh)+' GWh/yr',
+'  ≈ the annual electricity of '+fmt(s.hh)+' households · est. '+fmt1(s.co2Add)+' Mt CO₂/yr at grid intensity','',
+'LOAD-REMOVAL PORTFOLIO (net-load responsibility)',
+'  • '+fmt(s.bld)+' buildings under AI optimisation → '+fmt(s.bld*0.26)+' GWh/yr removed',
+'  • '+fmt1(s.lossPts)+' pts of distribution losses recovered → '+fmt(s.lossPts/100*s.R.throughputGWh)+' GWh/yr removed',
+'  • '+fmt(s.flexMW)+' MW flexible demand under AI control ('+Math.round(s.flexRatio*100)+'% of facility peak)','',
+'NET-LOAD RATIO: '+Math.round(s.ratio*100)+'% of added load offset'+(s.ratio>=1?' — deal balances':' — gap remains with ratepayers/communities'),
+'Emissions avoided by portfolio: '+(s.co2Rem>=1?fmt1(s.co2Rem)+' Mt':fmt(s.co2Rem*1000)+' kt')+' CO₂/yr','',
+'COMMITMENTS'+(committed.length?':':' — none selected'),...committed,
+...(missing.length?['','OPEN ITEMS:',...missing]:[]),'',
+'Illustrative model — coefficients from IEA & IndiaAI Casebook on AI in Energy (2026, CC BY 4.0)',
+'Generated by the Load Ledger digital twin · ai4publicgood.com'];
+    $('tsText').textContent=lines.join('\n');
+    $('termsheet').classList.add('show');
+    $('tsCopy').hidden=false;
+  });
+  $('tsCopy').addEventListener('click',async e=>{
+    try{ await navigator.clipboard.writeText($('tsText').textContent); e.target.textContent='Copied ✓'; }
+    catch{ e.target.textContent='Select & copy manually'; }
+    setTimeout(()=>e.target.textContent='Copy',2000);
+  });
+  twinRender();
+}
+
 /* staggered card entrance */
 const allCards=[...document.querySelectorAll('.card')];
 if(!RM && 'IntersectionObserver' in window){
@@ -700,7 +928,7 @@ if(!RM && 'IntersectionObserver' in window){
 }
 onScrollFx();
 
-const sectionIds=['ledger','evidence','pays','india','principles'];
+const sectionIds=['ledger','evidence','pays','india','twin','principles'];
 const navLinks={}; document.querySelectorAll('nav.toc a').forEach(a=>{ navLinks[a.getAttribute('href').slice(1)]=a; });
 const spy=new IntersectionObserver(entries=>{
   entries.forEach(en=>{
@@ -717,7 +945,7 @@ addEventListener('keydown',e=>{
   const tag=(e.target.tagName||'').toLowerCase();
   if(tag==='input'||tag==='textarea'||e.target.isContentEditable) return;
   const i=parseInt(e.key,10);
-  if(i>=1 && i<=5){ const s=document.getElementById(sectionIds[i-1]); if(s) s.scrollIntoView({behavior:'smooth',block:'start'}); }
+  if(i>=1 && i<=6){ const s=document.getElementById(sectionIds[i-1]); if(s) s.scrollIntoView({behavior:'smooth',block:'start'}); }
 });
 
 const themeBtn=document.getElementById('themeBtn');
