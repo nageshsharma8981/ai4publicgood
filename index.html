@@ -1,0 +1,595 @@
+<title>The Load Ledger · Who Pays for Big AI's Energy Demand?</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#F2F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+    --ink:#17211E; --ink2:#54615C; --ink3:#7C8983; --line:#DBE2DF;
+    --adds:#A85410; --adds-ink:#8F4409; --adds-soft:#F6E8DA; --adds-line:#E4C9A8;
+    --rem:#0D7A63; --rem-ink:#0A614F; --rem-soft:#DDEEE8; --rem-line:#AFD6C9;
+    --accent:#0D7A63; --btn-primary-ink:#FFFFFF;
+    --serif:"Iowan Old Style","Palatino","Palatino Linotype","Book Antiqua",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(23,33,30,.05),0 4px 16px rgba(23,33,30,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0D1412; --surface:#151F1C; --surface2:#1B2622;
+      --ink:#E6EDEA; --ink2:#9FAEA8; --ink3:#71807A; --line:#263430;
+      --adds:#E09A50; --adds-ink:#E8A85F; --adds-soft:#2A2115; --adds-line:#4E3A22;
+      --rem:#43BFA0; --rem-ink:#55CBAD; --rem-soft:#12251F; --rem-line:#1F4A3D;
+      --accent:#43BFA0; --btn-primary-ink:#08201A;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F2F5F4; --surface:#FFFFFF; --surface2:#EAEFED;
+    --ink:#17211E; --ink2:#54615C; --ink3:#7C8983; --line:#DBE2DF;
+    --adds:#A85410; --adds-ink:#8F4409; --adds-soft:#F6E8DA; --adds-line:#E4C9A8;
+    --rem:#0D7A63; --rem-ink:#0A614F; --rem-soft:#DDEEE8; --rem-line:#AFD6C9;
+    --accent:#0D7A63; --btn-primary-ink:#FFFFFF;
+    --shadow:0 1px 2px rgba(23,33,30,.05),0 4px 16px rgba(23,33,30,.05);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1412; --surface:#151F1C; --surface2:#1B2622;
+    --ink:#E6EDEA; --ink2:#9FAEA8; --ink3:#71807A; --line:#263430;
+    --adds:#E09A50; --adds-ink:#E8A85F; --adds-soft:#2A2115; --adds-line:#4E3A22;
+    --rem:#43BFA0; --rem-ink:#55CBAD; --rem-soft:#12251F; --rem-line:#1F4A3D;
+    --accent:#43BFA0; --btn-primary-ink:#08201A;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--rem-soft);color:var(--ink)}
+
+  .strip{background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:.55rem 1.25rem;display:flex;gap:.5rem 1.5rem;flex-wrap:wrap;justify-content:center}
+  .strip span{white-space:nowrap;opacity:.92}
+
+  .wrap{max-width:1060px;margin:0 auto;padding:0 1.25rem}
+
+  header.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,4.5vw,3.1rem);line-height:1.12;margin:0 0 1rem;text-wrap:balance;max-width:21ch}
+  h1 .adds-w{color:var(--adds-ink)} h1 .rem-w{color:var(--rem-ink)}
+  .lede{font-size:1.06rem;color:var(--ink2);max-width:62ch;margin:0 0 2rem}
+  .lede strong{color:var(--ink)}
+
+  .hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;position:relative}
+  .hero-stats::after{content:"vs";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:999px;width:2.2rem;height:2.2rem;display:flex;align-items:center;justify-content:center;z-index:2}
+  @media (max-width:679px){.hero-stats::after{display:none}}
+  .india-stats{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .india-stats::after{display:none}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.4rem 1.5rem;box-shadow:var(--shadow)}
+  .tile.adds{border-color:var(--adds-line)} .tile.rem{border-color:var(--rem-line)}
+  .tile .k{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem}
+  .tile.adds .k{color:var(--adds-ink)} .tile.rem .k{color:var(--rem-ink)}
+  .tile .v{font-family:var(--serif);font-size:2.3rem;line-height:1.05;font-weight:600;font-variant-numeric:tabular-nums}
+  .tile .d{color:var(--ink2);font-size:.9rem;margin-top:.5rem;max-width:40ch}
+
+  nav.toc{position:sticky;top:0;z-index:20;background:color-mix(in oklab,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.6rem 0;margin-bottom:.5rem}
+  nav.toc .wrap{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+  nav.toc a{font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;color:var(--ink2);text-decoration:none;padding:.35rem .7rem;border-radius:999px;border:1px solid transparent}
+  nav.toc a:hover{color:var(--ink);border-color:var(--line);background:var(--surface)}
+  nav.toc a[aria-current="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  nav.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  nav.toc .spacer{flex:1}
+  nav.toc button{font-family:var(--mono);font-size:.72rem;padding:.35rem .7rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+  nav.toc button:hover{color:var(--ink)}
+  @media (max-width:600px){
+    nav.toc .wrap{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+    nav.toc .wrap::-webkit-scrollbar{display:none}
+    nav.toc a,nav.toc button{white-space:nowrap;flex:0 0 auto}
+  }
+
+  section{padding:3rem 0;border-bottom:1px solid var(--line);scroll-margin-top:56px}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 .4rem;text-wrap:balance}
+  .sec-sub{color:var(--ink2);max-width:68ch;margin:0 0 1.8rem}
+  .sec-num{font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:.5rem}
+
+  .ledger{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media (max-width:760px){.ledger{grid-template-columns:1fr}}
+  .col{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+  .col-h{padding:1rem 1.25rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem}
+  .col.adds .col-h{background:var(--adds-soft);color:var(--adds-ink);border-bottom:1px solid var(--adds-line)}
+  .col.rem .col-h{background:var(--rem-soft);color:var(--rem-ink);border-bottom:1px solid var(--rem-line)}
+  .col ul{margin:0;padding:.4rem 0;list-style:none}
+  .col li{padding:.8rem 1.25rem;border-bottom:1px solid var(--line);font-size:.93rem;color:var(--ink2)}
+  .col li:last-child{border-bottom:none}
+  .col li strong{color:var(--ink);display:block;margin-bottom:.15rem}
+  .col li .src{font-family:var(--mono);font-size:.7rem;color:var(--ink3);display:block;margin-top:.3rem}
+
+  .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.5rem;box-shadow:var(--shadow);margin-top:1.5rem}
+  .chart-card h3{font-family:var(--sans);font-size:.95rem;margin:0 0 .2rem}
+  .chart-card .cap{font-size:.8rem;color:var(--ink3);margin:0 0 1.2rem}
+  .bars{display:grid;gap:.55rem}
+  .bar-row{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:.8rem;align-items:center;font-size:.85rem}
+  @media (max-width:560px){.bar-row{grid-template-columns:1fr;gap:.15rem}}
+  .bar-row .lbl{color:var(--ink);text-align:right;line-height:1.25}
+  @media (max-width:560px){.bar-row .lbl{text-align:left}}
+  .bar-row .lbl small{display:block;color:var(--ink3);font-size:.72rem}
+  .bar-track{position:relative;height:22px;display:flex;align-items:center;background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:33.334% 100%;background-repeat:repeat-x}
+  .bar-fill{height:16px;background:var(--rem);border-radius:0 4px 4px 0;position:relative;min-width:2px}
+  .bar-fill.peak{background:transparent;border:1.5px solid var(--rem);height:15px}
+  .bar-val{font-family:var(--mono);font-size:.74rem;color:var(--ink2);margin-left:.5rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .bar-row:hover .bar-fill{filter:brightness(1.1)}
+  .chart-legend{display:flex;gap:1.25rem;margin-top:1rem;font-size:.75rem;color:var(--ink2);flex-wrap:wrap}
+  .chart-legend .sw{display:inline-block;width:14px;height:10px;background:var(--rem);border-radius:2px;margin-right:.35rem;vertical-align:baseline}
+  .chart-legend .sw.o{background:transparent;border:1.5px solid var(--rem)}
+
+  .filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem}
+  .chip .n{opacity:.55;margin-left:.3rem}
+  .results-note{font-family:var(--mono);font-size:.72rem;color:var(--ink3);margin:0 0 1.2rem}
+  .chip{font-family:var(--mono);font-size:.74rem;letter-spacing:.03em;padding:.4rem .85rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer}
+  .chip:hover{color:var(--ink);border-color:var(--ink3)}
+  .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;scroll-margin-top:70px;transition:transform .18s ease,box-shadow .18s ease}
+  .card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(23,33,30,.06),0 10px 28px rgba(23,33,30,.09)}
+  .card[hidden]{display:none}
+  .card .top{padding:1.1rem 1.25rem .9rem;flex:1;cursor:pointer}
+  .card .tags{display:flex;gap:.4rem;margin-bottom:.7rem;flex-wrap:wrap}
+  .tag{font-family:var(--mono);font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:.18rem .5rem;border-radius:4px;background:var(--surface2);color:var(--ink2)}
+  .tag.obs{background:var(--adds-soft);color:var(--adds-ink)}
+  .card .metric{font-family:var(--serif);font-size:1.75rem;font-weight:600;line-height:1.1;color:var(--rem-ink);font-variant-numeric:tabular-nums;margin-bottom:.35rem}
+  .card h3{font-size:.98rem;margin:0 0 .3rem;line-height:1.35}
+  .card .who{font-size:.8rem;color:var(--ink3);margin-bottom:.5rem}
+  .card .what{font-size:.88rem;color:var(--ink2);margin:0}
+  .card details{border-top:1px solid var(--line)}
+  .card summary{font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:var(--ink2);padding:.65rem 1.25rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  .card summary::-webkit-details-marker{display:none}
+  .card summary::after{content:"+";font-size:.95rem;color:var(--ink3)}
+  .card details[open] summary::after{content:"–"}
+  .card summary:hover{color:var(--ink);background:var(--surface2)}
+  .card summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .card .detail{padding:0 1.25rem 1rem;font-size:.85rem;color:var(--ink2)}
+  .card .detail ul{margin:.5rem 0;padding-left:1.1rem}
+  .card .detail li{margin-bottom:.3rem}
+  .card .cite{font-family:var(--mono);font-size:.68rem;color:var(--ink3);display:block;margin-top:.6rem}
+
+  .pays{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+  .pay{background:var(--surface);border:1px solid var(--adds-line);border-radius:10px;padding:1.25rem 1.4rem;box-shadow:var(--shadow)}
+  .pay .n{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--adds-ink);text-transform:uppercase;margin-bottom:.5rem}
+  .pay h3{font-family:var(--serif);font-size:1.1rem;font-weight:600;margin:0 0 .45rem;line-height:1.3}
+  .pay p{font-size:.9rem;color:var(--ink2);margin:0}
+  .callout{margin-top:1.5rem;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:1.4rem 1.6rem}
+  .callout .q{font-family:var(--serif);font-size:1.35rem;font-weight:600;margin:0 0 .4rem}
+  .callout p{margin:0;color:var(--ink2);font-size:.92rem;max-width:70ch}
+  .scope-note{margin-top:1rem;font-size:.82rem;color:var(--ink3);font-family:var(--mono)}
+
+  .principles{counter-reset:pr;display:grid;gap:1rem}
+  .pr{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.4rem 1.6rem;box-shadow:var(--shadow);display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:start}
+  @media (max-width:560px){.pr{grid-template-columns:1fr;gap:.5rem}}
+  .pr::before{counter-increment:pr;content:counter(pr,decimal-leading-zero);font-family:var(--mono);font-size:1rem;color:var(--rem-ink);border:1px solid var(--rem-line);background:var(--rem-soft);border-radius:8px;width:2.6rem;height:2.6rem;display:flex;align-items:center;justify-content:center}
+  .pr h3{font-family:var(--serif);font-size:1.18rem;font-weight:600;margin:0 0 .4rem}
+  .pr p{margin:0 0 .6rem;color:var(--ink2);font-size:.93rem;max-width:72ch}
+  .pr p:last-of-type{margin-bottom:0}
+  .anchor-row{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.7rem}
+  .anchor-row .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);align-self:center;margin-right:.2rem}
+  .ev{font-family:var(--mono);font-size:.68rem;padding:.2rem .55rem;border-radius:4px;background:var(--rem-soft);color:var(--rem-ink);border:1px solid var(--rem-line);cursor:pointer}
+  .ev:hover{filter:brightness(1.05)}
+  .ev.premise{background:var(--adds-soft);color:var(--adds-ink);border-color:var(--adds-line);cursor:default}
+
+  .actions{display:flex;gap:.6rem;margin-top:1.6rem;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:.78rem;padding:.6rem 1.1rem;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+  .btn.primary{background:var(--rem);border-color:var(--rem);color:var(--btn-primary-ink,#fff)}
+  .btn:hover{filter:brightness(1.05)}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .return-pill{position:fixed;right:1.25rem;bottom:1.25rem;z-index:30;font-family:var(--mono);font-size:.74rem;padding:.6rem 1rem;border-radius:999px;border:1px solid var(--rem-line);background:var(--rem-soft);color:var(--rem-ink);cursor:pointer;box-shadow:var(--shadow);display:none}
+  .return-pill.show{display:block}
+  .return-pill:hover{filter:brightness(1.04)}
+  .return-pill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  footer{padding:2.5rem 0 3.5rem;color:var(--ink3);font-size:.8rem}
+  footer p{max-width:78ch;margin:0 0 .7rem}
+  footer a{color:var(--ink2)}
+  .flash{animation:flash 1.6s ease-out}
+  @keyframes flash{0%{background:var(--rem-soft)}100%{background:var(--surface)}}
+
+  @media print{
+    .strip,nav.toc,.filters,.results-note,.actions,.card details,.return-pill{display:none!important}
+    body{background:#fff;color:#111}
+    section{border:none;padding:1.2rem 0;break-inside:avoid-page}
+    .card,.pr,.pay,.tile,.col,.chart-card{box-shadow:none;border:1px solid #ccc}
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .bar-fill,.tag,.ev,.col-h,.pr::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+
+<div class="strip" role="doc-subtitle">
+  <span>IRB · Energy</span><span>Wed 12 August · 12:45–13:45</span><span>Room IX · Palais des Nations</span><span>Evidence briefing</span>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">AI and climate change · Who pays for big AI's energy demand?</p>
+    <h1>The kind of AI that <span class="adds-w">adds load</span> — and the kind that <span class="rem-w">removes it</span>.</h1>
+    <p class="lede">The AI conversation is dominated by the electricity that hyperscale data centres will consume. But there is a second, documented story: AI already deployed <strong>inside</strong> the energy system is measurably cutting demand, waste and emissions. This briefing sets both sides of the ledger, then derives <strong>Fair Energy and Public-Benefit Principles for AI Infrastructure</strong> from the evidence.</p>
+    <div class="hero-stats">
+      <div class="tile adds">
+        <div class="k">The load AI adds</div>
+        <div class="v">≈ Japan</div>
+        <p class="d">IEA analysis projects global data-centre electricity use could <strong>double by 2030</strong> — by then consuming as much electricity in a year as Japan does today.</p>
+      </div>
+      <div class="tile rem">
+        <div class="k">The load AI can remove</div>
+        <div class="v">&gt; 13 EJ / yr</div>
+        <p class="d">Widespread adoption of already-commercial AI optimisations could save over <strong>13 exajoules a year by 2035</strong> — more than Indonesia's entire annual energy consumption (IEA, <em>Energy and AI</em>, 2025).</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <div class="wrap">
+    <a href="#ledger">The ledger</a>
+    <a href="#evidence">Evidence</a>
+    <a href="#pays">Who pays</a>
+    <a href="#india">India lens</a>
+    <a href="#principles">Principles</a>
+    <span class="spacer"></span>
+    <button id="themeBtn" type="button" aria-label="Toggle theme">◐ theme</button>
+  </div>
+</nav>
+
+<section id="ledger">
+  <div class="wrap">
+    <span class="sec-num">01 · Framing</span>
+    <h2>Two entries in the same ledger</h2>
+    <p class="sec-sub">Both columns are real. The policy question is not whether AI uses energy — it is whether the balance of deployment, and of who finances each column, is fair.</p>
+    <div class="ledger">
+      <div class="col adds">
+        <div class="col-h">▲ AI that adds load</div>
+        <ul>
+          <li><strong>Hyperscale training &amp; inference</strong> Data-centre electricity use on track to double by 2030 — the equivalent of adding a Japan to the world's grids. <span class="src">IEA, Energy and AI (2025)</span></li>
+          <li><strong>Publicly financed foundations</strong> Grids, transmission upgrades, water systems and permitting that serve private AI facilities are often recovered from all ratepayers. <span class="src">Session premise · under review</span></li>
+          <li><strong>Capacity competition</strong> Large facilities compete for scarce connection capacity with housing, manufacturing and hospitals; some utilities have delayed other connections. <span class="src">Session premise · under review</span></li>
+          <li><strong>Scale-rewarding incentives</strong> The industry rewards larger models and more compute, even where smaller, domain-specific models would serve the task at a fraction of the energy. <span class="src">Session premise · under review</span></li>
+        </ul>
+      </div>
+      <div class="col rem">
+        <div class="col-h">▼ AI that removes load</div>
+        <ul>
+          <li><strong>Buildings become optimisers</strong> Deployed systems deliver 15–30% energy savings and ~20% peak-demand cuts across offices, hospitals, campuses and homes. <span class="src">Casebook cases 10–12 · Observatory</span></li>
+          <li><strong>Grids waste less</strong> AI forecasting, mapping and dispatch cut distribution losses, curtailment and penalty-driven balancing — 95% forecast reliability, ~50% lower deviation penalties. <span class="src">Casebook cases 2–4</span></li>
+          <li><strong>Transport avoids fuel</strong> Fuel-efficient routing alone avoided an estimated 2.7 Mt CO₂e in 2024; smart depot charging cut peak charges 22%. <span class="src">Casebook cases 8–9</span></li>
+          <li><strong>Industry burns less</strong> Steel, cement and refining deployments cut fuel per tonne, rework and flaring — thousands of tonnes of CO₂ avoided per site, per year. <span class="src">Casebook cases 13–14 · Observatory</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Documented demand reductions from deployed AI</h3>
+      <p class="cap">Energy or peak-demand reduction per deployment, midpoint of reported range · self-reported figures, IEA Casebook on AI in Energy &amp; IEA Energy and AI Observatory (2025–26)</p>
+      <div class="bars" id="bars" role="img" aria-label="Horizontal bar chart of documented energy and peak-demand reductions, ranging from 7 percent at Infosys campus to 25 to 30 percent for Zodhya retrofit buildings"></div>
+      <div class="chart-legend"><span><span class="sw"></span>Energy consumption</span><span><span class="sw o"></span>Peak demand / peak charges</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="evidence">
+  <div class="wrap">
+    <span class="sec-num">02 · Evidence base</span>
+    <h2>27 deployments, measured outcomes</h2>
+    <p class="sec-sub">Case studies from the IEA × IndiaAI Mission <em>Casebook on AI in Energy</em> (15 peer-screened deployments, published Feb 2026) and the IEA Energy and AI Observatory. Figures are as reported by the deploying organisations. Filter by sector; expand any card for the underlying numbers.</p>
+    <div class="filters" role="group" aria-label="Filter cases by sector" id="filters"></div>
+    <p class="results-note" id="resultsNote" aria-live="polite"></p>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<section id="pays">
+  <div class="wrap">
+    <span class="sec-num">03 · Practice under review</span>
+    <h2>Who pays, today</h2>
+    <p class="sec-sub">Four cost-shift mechanisms the board is asked to review. These are the session's premises — the evidence base above shows the counterfactual: load-removal is deliverable now, so the current allocation is a choice, not a necessity.</p>
+    <div class="pays">
+      <div class="pay"><div class="n">Mechanism A</div><h3>Ratepayers finance private compute</h3><p>Utilities recover the cost of grid, transmission, water and permitting upgrades from all customers — households and local businesses indirectly finance infrastructure primarily serving private AI companies.</p></div>
+      <div class="pay"><div class="n">Mechanism B</div><h3>Capacity is reserved away from the public</h3><p>Large AI facilities compete with housing, manufacturing and hospitals for scarce electricity; in some regions new industrial or residential connections have been delayed because capacity is held for data centres.</p></div>
+      <div class="pay"><div class="n">Mechanism C</div><h3>Costs are local, returns are global</h3><p>Carbon, water consumption and land use are borne by host communities, while the economic returns accrue globally. Corporate emissions are measured; local impact and community resilience rarely are.</p></div>
+      <div class="pay"><div class="n">Mechanism D</div><h3>Scale is rewarded over efficiency</h3><p>Bigger models and more compute are the industry's default success metric — yet many applications are served effectively by smaller, domain-specific or locally deployed models needing far less energy.</p></div>
+    </div>
+    <div class="callout">
+      <p class="q">Can we deploy AI that removes load rather than adding it — and find a financial model that supports it?</p>
+      <p>The evidence section answers the first half: yes, at commercial scale, today. The principles below propose the second half — the financial and governance model.</p>
+    </div>
+    <p class="scope-note">Out of scope for this board: comparison of specific technologies or AI models · data sovereignty.</p>
+  </div>
+</section>
+
+<section id="india">
+  <div class="wrap">
+    <span class="sec-num">04 · The India lens</span>
+    <h2>If the principles work anywhere, they must work in India</h2>
+    <p class="sec-sub">One of the world's largest energy markets and its fastest-growing major AI adopter — where the trade-off between AI infrastructure investment and energy access is not theoretical. 12 of the casebook's 15 deployments are Indian: India is simultaneously where the pressure is highest and where load-removing AI is already proven.</p>
+
+    <div class="hero-stats india-stats">
+      <div class="tile adds">
+        <div class="k">Demand pressure</div>
+        <div class="v">+50%</div>
+        <p class="d">Growth in India's electricity consumption 2020–2025 — from cooling, appliances, industry, EV fleets <strong>and data centres</strong>, all competing for the same buildout.</p>
+      </div>
+      <div class="tile adds">
+        <div class="k">Recoverable waste</div>
+        <div class="v">Mid-teens</div>
+        <p class="d">India's aggregate technical &amp; commercial (AT&amp;C) distribution losses, vs 5–8% in peer economies. The gap is a multi-gigawatt resource that AI grid tools can recover — no new generation required.</p>
+      </div>
+      <div class="tile rem">
+        <div class="k">Digital rails already laid</div>
+        <div class="v">20 crore</div>
+        <p class="d">Smart meters sanctioned under RDSS (≈5 crore installed by Dec 2025) — the data layer that AI loss-mapping, indexing and demand-response tools plug into.</p>
+      </div>
+    </div>
+
+    <div class="ledger" style="margin-top:1rem">
+      <div class="col adds">
+        <div class="col-h">▲ The trade-off, sharpened</div>
+        <ul>
+          <li><strong>Same capex, two claimants</strong> Every crore of grid, transmission and water buildout that serves hyperscale compute is a crore not serving last-mile connections, cooling-driven residential demand or industrial electrification.</li>
+          <li><strong>Distribution utilities are already stressed</strong> AT&amp;C losses raise procurement costs, weaken utility finances and delay payments to generators — socialising data-centre infrastructure costs onto this system compounds an existing fragility. <span class="src">Casebook, case study 3</span></li>
+          <li><strong>Cross-subsidy politics</strong> Indian tariffs deliberately shift costs between consumer classes to protect households and agriculture. Where large AI loads enter as ordinary industrial consumers, the "who pays" question lands directly on that settlement.</li>
+        </ul>
+      </div>
+      <div class="col rem">
+        <div class="col-h">▼ Why load-removal pays more in India</div>
+        <ul>
+          <li><strong>Loss reduction beats new build</strong> Closing even part of the mid-teens → 5–8% loss gap frees more capacity per rupee than new generation — and AI mapping/forecasting is how utilities in Maharashtra, Tamil Nadu and Delhi are doing it. <span class="src">Casebook, cases 3 &amp; 6</span></li>
+          <li><strong>Renewables need AI to be bankable</strong> With ~135 GW solar heading toward 280 GW by 2030 and non-fossil at 50% of installed capacity, forecasting accuracy is revenue: halved deviation penalties across 500 MW, ~95% dispatch reliability. <span class="src">Casebook, cases 2 &amp; 4</span></li>
+          <li><strong>Efficiency serves access</strong> Buildings, depots and microgrid deployments (15–30% savings, 22% peak cuts) defer capacity buildout — leaving headroom for connections, not just compute. <span class="src">Casebook, cases 5, 8, 10–12</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p class="q">India already has the policy rails the principles need.</p>
+      <p>Additionality and queue protection → connection and open-access rules under State ERCs. Cost causation → dedicated HT tariff categories. Net-load responsibility → RDSS and the Energy Efficiency Financing Platform. Flexibility duty → time-of-use tariffs and formal demand response (the casebook's own ask for e-bus depots, via an India Energy Stack). Right-sizing → IndiaAI Mission compute procurement standards. Metering the bargain → smart-meter data access. The principles are not new institutions for India — they are a fairness test applied to programmes already running.</p>
+    </div>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+    <span class="sec-num">05 · Expected output</span>
+    <h2>Fair Energy and Public-Benefit Principles for AI Infrastructure</h2>
+    <p class="sec-sub">A draft for the board's consideration. Each principle is anchored either in the deployment evidence (teal) or in the practices under review (amber).</p>
+
+    <div class="principles" id="prList">
+      <div class="pr"><div>
+        <h3>Additionality of supply</h3>
+        <p>New hyperscale AI load is matched by new clean generation and grid capacity procured by the operator — it does not draw down capacity needed for housing, hospitals, manufacturing or existing industry. Connection queues protect public-interest load.</p>
+        <div class="anchor-row"><span class="k">Anchors</span><span class="ev premise">Mechanism B</span></div>
+      </div></div>
+
+      <div class="pr"><div>
+        <h3>Cost causation, not cost socialisation</h3>
+        <p>Whoever causes infrastructure cost pays it. Grid, transmission and water upgrades built primarily to serve AI facilities are financed through dedicated tariff classes and long-term take-or-pay commitments — not recovered from all ratepayers.</p>
+        <div class="anchor-row"><span class="k">Anchors</span><span class="ev premise">Mechanism A</span></div>
+      </div></div>
+
+      <div class="pr"><div>
+        <h3>Net-load responsibility</h3>
+        <p>Operators of load-adding AI co-finance load-removing AI in the host grid — a "megawatts-for-negawatts" obligation. The evidence shows removal is bankable now: 15–30% building savings, ~20% peak cuts, halved deviation penalties. A demand-reduction obligation on large AI loads is therefore a financeable instrument, not a tax on innovation.</p>
+        <div class="anchor-row"><span class="k">Anchors</span><button class="ev" data-goto="c10">Enlog</button><button class="ev" data-goto="c11">Zodhya</button><button class="ev" data-goto="c12">Smart Joules</button><button class="ev" data-goto="o2">Voltalis</button></div>
+      </div></div>
+
+      <div class="pr"><div>
+        <h3>Flexibility is a duty of scale</h3>
+        <p>Any multi-megawatt load — data centre or depot — operates as grid-responsive demand: shifting, shedding and storing at times of system stress, under time-of-use tariffs and formal demand-response mechanisms, rather than taking firm 24/7 power.</p>
+        <div class="anchor-row"><span class="k">Anchors</span><button class="ev" data-goto="c8">Kazam depots</button><button class="ev" data-goto="o2">Voltalis 2 GW VPP</button><button class="ev" data-goto="c10">Enlog</button></div>
+      </div></div>
+
+      <div class="pr"><div>
+        <h3>Local costs count, locally</h3>
+        <p>Carbon, water, land and grid stress are measured and compensated where they occur. Permits carry benefit-sharing: waste-heat reuse, water stewardship, community energy funds and resilience investment in the host region — accounted alongside corporate emissions.</p>
+        <div class="anchor-row"><span class="k">Anchors</span><span class="ev premise">Mechanism C</span></div>
+      </div></div>
+
+      <div class="pr"><div>
+        <h3>Right-size the model</h3>
+        <p>Public procurement and policy reward energy per outcome, not parameter count. The casebook's own selection finding: high-impact AI in energy is use-case driven, explainable and resource-efficient — running on edge devices, local controllers and modest cloud footprints, not hyperscale clusters.</p>
+        <div class="anchor-row"><span class="k">Anchors</span><button class="ev" data-goto="c1">BIOLOOP edge AI</button><button class="ev" data-goto="c12">DeJoule local control</button><button class="ev" data-goto="c14">SENSEI</button></div>
+      </div></div>
+
+      <div class="pr"><div>
+        <h3>Meter the bargain, publicly</h3>
+        <p>Facility-level public reporting of electricity, water and grid impact — and independently verifiable accounting of load removed — so regulators and communities can audit whether an operator's AI portfolio is net-adding or net-removing. What is metered can be governed.</p>
+        <div class="anchor-row"><span class="k">Anchors</span><button class="ev" data-goto="c10">Enlog (5 GWh metered)</button><button class="ev" data-goto="c9">Google routing method</button><span class="ev premise">Mechanism C</span></div>
+      </div></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="copyBtn" type="button">Copy principles as text</button>
+      <button class="btn" id="printBtn" type="button">Print / save as PDF</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Sources.</strong> IEA &amp; IndiaAI Mission, <em>Casebook on AI in Energy</em> (Feb 2026, CC BY 4.0) — 15 case studies selected from 72 submissions by an inter-ministerial committee (MNRE, Ministry of Power, MeitY) and the IEA. IEA, <em>Energy and AI</em> (2025) and the IEA Energy and AI Observatory. Google 2025 Environmental Report (fuel-efficient routing estimate).</p>
+    <p><strong>Method note.</strong> Per the casebook's disclaimer, case-study figures are self-reported by the deploying organisations and were screened, not independently audited. Session premises ("who pays" mechanisms) are the framing supplied for this board's review, not IEA findings. Data-centre and savings projections are IEA analysis.</p>
+    <p>Prepared as an evidence briefing for the IRB · Energy session, 12 August · Palais des Nations. Expected output: Fair Energy and Public-Benefit Principles for AI Infrastructure.</p>
+    <p>Presenter tip: keys <strong>1–5</strong> jump between sections.</p>
+  </div>
+</footer>
+
+<button class="return-pill" id="returnPill" type="button">↩ Back to principle</button>
+
+<script>
+const CASES = [
+ {id:"c1", sector:"Supply", org:"BIOLOOP · Karnataka, India", metric:"−10–15% energy", title:"AI-stabilised biorefineries lift clean-fuel yield", what:"Edge-AI monitors algal reactors and auto-corrects conditions before batches fail.", detail:["Biofuel lipid yield up 18–27%; hydrogen output up 14–22%","Energy consumption down 10–15%","Runs on a compact edge device — no cloud required"], cite:"Casebook, case study 1"},
+ {id:"c2", sector:"Grids & power", org:"Smart Grid Analytics (Solvyn AURA) · India", metric:"~95% forecast reliability", title:"One AI loop for renewables, storage and trading", what:"Unifies generation forecasting, battery dispatch and exchange bidding.", detail:["Forecast reliability improved to ~95%","Fewer last-minute schedule deviations; lower-stress battery cycling","Commercially deployed across utility-scale solar, wind and hybrid projects"], cite:"Casebook, case study 2"},
+ {id:"c3", sector:"Grids & power", org:"Pravāh · Maharashtra, Tamil Nadu, Delhi", metric:"Months, not 5+ years", title:"Computer vision maps the grid to localise losses", what:"Satellite and street imagery reconstruct network topology; AI load-flow isolates where losses originate.", detail:["Sangli district network mapped in months vs 5+ years manually","India's AT&C distribution losses in the mid-teens vs 5–8% in peer economies — losses are highly localised","Feeder-level forecasts cut exposure to costly short-term power; Powerthon winner (Ministry of Power)"], cite:"Casebook, case study 3"},
+ {id:"c4", sector:"Grids & power", org:"Infutrix (Voltura AI) · 500 MW across India", metric:"−50% penalties", title:"Hyperlocal solar forecasting halves deviation penalties", what:"Sky cameras, satellite and SCADA feeds cut forecast error for large solar parks.", detail:["Forecast error reduced from 30–40% to 15–20% RMSE","≈50% reduction in Deviation Settlement Mechanism penalties","Even a 1% DSM cut across India's ~130 GW solar ≈ INR 150–200 crore saved annually"], cite:"Casebook, case study 4"},
+ {id:"c5", sector:"Grids & power", org:"TCS + IIT Kanpur · Uttar Pradesh microgrids", metric:"−15–20% op. costs", title:"Rural microgrids run as one 'energy cloud'", what:"Physics-informed AI clusters distributed assets to unlock flexibility.", detail:["15–20% lower operational costs in pilot","30–40% better capital efficiency","Deterministic, explainable decisions (physics models + AI, not generative)"], cite:"Casebook, case study 5"},
+ {id:"c6", sector:"Grids & power", org:"Secure Meters · large Indian utility roll-out", metric:"60% → 90%+ accuracy", title:"AI keeps millions of 'electrical addresses' current", what:"Reconstructs meter-to-transformer-to-feeder connectivity from smart-meter data.", detail:["DT-to-consumer indexing accuracy ~90.3%; DT-to-feeder ~82.7%","Roll-out spans tens of thousands of transformers, millions of consumers","Enables targeted loss reduction and fairer billing; no PII required"], cite:"Casebook, case study 6"},
+ {id:"c7", sector:"Grids & power", org:"OpenSolar (Ada) · 160+ countries", metric:"−40% design errors", title:"AI designs buildable rooftop solar in seconds", what:"Auto-designs systems from satellite data; voice-editable on site.", detail:["20% less design time; ~40% fewer design errors (Sunsave)","USD 26 000 labour saving for one installer; ~USD 30 million if applied across all users","Faster, accurate proposals raise conversion to rooftop solar"], cite:"Casebook, case study 7"},
+ {id:"c8", sector:"Transport", org:"Kazam EV Tech · Indian e-bus depots", metric:"−22% peak charges", title:"Flexible charging turns bus depots into grid assets", what:"Digital-twin EMS schedules multi-megawatt overnight charging around grid stress.", detail:["Fleet uptime 85% → 92%; dispatch delay 12 min → under 3 min","Peak demand charges down 22% in six-month pilot","10 000+ synthetic stress scenarios pre-trained the model; case argues depots be treated as formal demand-response resources"], cite:"Casebook, case study 8"},
+ {id:"c9", sector:"Transport", org:"Google Maps · global", metric:"−2.7 Mt CO₂e (2024)", title:"Fuel-efficient routing at planetary scale", what:"AI predicts per-route fuel use (incline, congestion, engine type) and offers the efficient option.", detail:["Estimated 2.7+ million tonnes CO₂e avoided in 2024 alone","Extended to two-wheelers in Southeast Asia","Built with US DOE's National Lab of the Rockies; method disclosed in Google's environmental report"], cite:"Casebook, case study 9"},
+ {id:"c10", sector:"Buildings", org:"Enlog · 50 000+ devices, India", metric:"−20–25% energy", title:"Buildings shift from passive consumers to active optimisers", what:"Edge devices + ML control appliances, health and demand in real time.", detail:["20–25% typical energy savings; up to 20% peak-demand reduction","Actively manages 30+ GWh/yr; 5 GWh saved ≈ 5 500 t CO₂ avoided","Retrofit-friendly; autonomous within comfort and safety limits"], cite:"Casebook, case study 10"},
+ {id:"c11", sector:"Buildings", org:"Zodhya · 50+ buildings, India & SE Asia", metric:"−25–30% energy", title:"Retrofit-first AI for HVAC and electrical systems", what:"SaverX tunes HVAC continuously; Soul finds electrical faults and losses.", detail:["25–30% energy savings without replacing equipment","1 000+ tonnes CO₂ avoided monthly across the portfolio","Rapid payback; relevant to compliance regimes like NYC Local Law 97"], cite:"Casebook, case study 11"},
+ {id:"c12", sector:"Buildings", org:"Smart Joules (DeJoule) · 600-bed hospital, Kerala", metric:"−15% energy", title:"Reinforcement learning runs a hospital's cooling plant", what:"AI on local controllers matches chillers, pumps and towers to live demand.", detail:["Chiller efficiency 0.87 → 0.74 kW/TR; 525 kWh saved daily; ~192 t CO₂/yr","Savings persisted through monsoon and peak summer","Deployed in 39+ buildings, averaging 7% improvement"], cite:"Casebook, case study 12"},
+ {id:"c13", sector:"Industry", org:"Gazelle IT / RITES · rail plant, India", metric:"12% → 1.2% rework", title:"Predictive inspection prevents defects before they're baked in", what:"Computer vision + process data forecast defect risk early in steel rail production.", detail:["Defect-related rework fell from 12% to ~1.2% in one year","~15 700 m of rail rework avoided ≈ 1 800 t CO₂/yr","Certified alternative to ultrasound inspection at ~1/10 the cost of imports"], cite:"Casebook, case study 13"},
+ {id:"c14", sector:"Industry", org:"ArcelorMittal Brazil (SENSEI) · 3 blast furnaces", metric:"−4.4 kg CO₂/t", title:"Thermal control AI cuts blast-furnace fuel", what:"Predicts furnace thermal state an hour ahead; recommends set-points every 30 min.", detail:["1.5 kg less fuel per tonne of pig iron; 4.4 kg CO₂/t avoided","Validated by same-day with/without comparison","Blast furnaces drive 45–60% of steel-sector energy use"], cite:"Casebook, case study 14"},
+ {id:"c15", sector:"Access & finance", org:"Nithio · sub-Saharan Africa", metric:"100M+ transactions", title:"AI credit scoring unlocks clean-energy finance", what:"Risk engine scores unbanked customers and clean-energy portfolios for investors.", detail:["100+ million payment transactions analysed","Hundreds of thousands of unbanked customers financed","Lowers cost of capital for solar home systems and e-mobility in markets where 600M people lack electricity"], cite:"Casebook, case study 15"},
+ {id:"o1", sector:"Buildings", obs:true, org:"SISAB + Schneider Electric · 600 schools, Stockholm", metric:"−9% electricity", title:"A cloud AI 'virtual operator' for public schools", what:"Setpoint adjustments every 15 minutes from ~10 000 sensors.", detail:["Electricity down 9% (3 527 MWh); district heating down 3% (2 388 MWh), 2019–2023","259 t CO₂e cut — with no hardware replacement","Public-building estate: savings accrue to taxpayers"], cite:"IEA Observatory"},
+ {id:"o2", sector:"Buildings", obs:true, org:"Voltalis · 250 000 buildings, 8 EU countries", metric:"2 GW flexible", title:"1.5 million devices form a demand-side virtual power plant", what:"ML manages HVAC devices against real-time market conditions.", detail:["2 GW of flexible capacity today; 10 GW planned by 2030","Customers typically save ~15% annually","Household demand response at power-plant scale"], cite:"IEA Observatory"},
+ {id:"o3", sector:"Buildings", obs:true, org:"Infosys · 6.4M sq ft campus, Pune", metric:"−7% in 6 months", title:"Smart-campus AI beats an already-efficient baseline", what:"IoT + ML optimise chillers, lighting and on-site solar.", detail:["7% efficiency gain within six months, from an EPI of 70 (code threshold: 180)","On-site generation up 5%; 7 900 t CO₂e avoided","Finds underperforming solar panels and failing equipment"], cite:"IEA Observatory"},
+ {id:"o4", sector:"Industry", obs:true, org:"Carbon Re + Heidelberg Materials · Mokra cement plant", metric:"−4.1% fuel cost", title:"AI process control for cement kilns", what:"Real-time clinker-quality prediction feeds the plant optimiser.", detail:["Fuel costs −4.1%; specific heat −2.2%; fuel-derived emissions ~−2%","Clinker meeting quality targets: 79% → 96%","Cement ≈ 8% of global GHG emissions — small % cuts are huge absolute numbers"], cite:"IEA Observatory"},
+ {id:"o5", sector:"Industry", obs:true, org:"ArcelorMittal Avilés · Spain", metric:"−62 000 t CO₂/yr", title:"AI-optimised gas recovery in steelmaking", what:"Thermodynamic + ML models optimise basic-oxygen-furnace gas and steam recovery.", detail:["BOF gas recovery up 49%; recovered steam up 76%","Natural gas savings above 1 000 TJ per year","USD 5.4M investment; completed 2022"], cite:"IEA Observatory"},
+ {id:"o6", sector:"Industry", obs:true, org:"Fero Labs · North American steel mill", metric:"−3.3% GWP", title:"White-box ML optimises scrap use in steel", what:"Causal-inference models maintain quality while maximising recycled scrap.", detail:["3.3% lower global-warming potential for one grade; 1.5% for the flagship product","No additional capital investment required","Explains its reasoning — 'white-box' by design"], cite:"IEA Observatory"},
+ {id:"o7", sector:"Grids & power", obs:true, org:"Google DeepMind + Tapestry · Chile", metric:"+15% accuracy", title:"AI wind forecasting for a 93%-renewables grid", what:"Physics + neural nets forecast wind for the national grid operator.", detail:["Up to 15% more accurate than prior industry standard","Less curtailment, more usable clean energy","Chile targets 93% renewable electricity by 2035"], cite:"IEA Observatory"},
+ {id:"o8", sector:"Grids & power", obs:true, org:"Iberdrola (ASPA) · offshore wind", metric:"€6.3M saved", title:"Predictive monitoring keeps offshore turbines running", what:"Cloud ML on live sensor data flags early failure signs.", detail:["€6.3 million saved over four years across two wind farms","Less downtime, proactive maintenance scheduling","Scalable where quality historical data exists"], cite:"IEA Observatory"},
+ {id:"o9", sector:"Grids & power", obs:true, org:"Hitachi Energy (Nostradamus AI) · US/AU markets", metric:"87–93% accuracy", title:"Probabilistic AI price forecasting", what:"Ten+ algorithms forecast wholesale prices for market participants.", detail:["87% (CAISO), 93% (MISO) accuracy vs 75% industry standard","Better price signals de-risk renewables and storage investment","Productised for non-data-scientists"], cite:"IEA Observatory"},
+ {id:"o10", sector:"Supply", obs:true, org:"Google + EDF (MethaneSAT) · global", metric:"9× underreported", title:"AI maps methane from oil & gas infrastructure", what:"Satellite image AI + methane data quantify emissions from large and small sources.", detail:["Covers areas producing 80% of global oil & gas","Detects excess methane down to ~kg/hr per km²","Early results: actual emissions can exceed 9× reported figures"], cite:"IEA Observatory"},
+ {id:"o11", sector:"Transport", obs:true, org:"Waymo · Phoenix, SF, LA", metric:"−6M kg CO₂ (2024)", title:"Autonomous all-electric ride fleets", what:"Custom AI drives a renewably powered shared fleet.", detail:["150 000+ autonomous rides weekly by end-2024","6+ million kg CO₂ avoided that year","Optimised consumption, reduced urban car ownership"], cite:"IEA Observatory"},
+ {id:"o12", sector:"Access & finance", obs:true, org:"IEA + MIT · Ghana, Senegal, Uganda", metric:"−40% demand error", title:"Building-level electrification planning for Africa", what:"Satellite + consumption data predict access and demand per building.", detail:["80%+ accuracy identifying electrified buildings","Demand-estimate errors cut 40% vs previous methods","Targets investment where ~600M people lack electricity"], cite:"IEA Observatory"}
+];
+
+const BARS = [
+ {l:"Zodhya · retrofit buildings", s:"25–30% energy", v:27.5, peak:false},
+ {l:"Enlog · buildings", s:"20–25% energy", v:22.5, peak:false},
+ {l:"Kazam · e-bus depots", s:"22% peak charges", v:22, peak:true},
+ {l:"Enlog · grid stress events", s:"up to 20% peak", val:"≤20%", v:20, peak:true},
+ {l:"TCS · rural microgrids", s:"15–20% op. cost", v:17.5, peak:false},
+ {l:"Smart Joules · hospital", s:"15% energy", v:15, peak:false},
+ {l:"Voltalis · homes (8 countries)", s:"~15% energy", v:15, peak:false},
+ {l:"BIOLOOP · biorefinery", s:"10–15% energy", v:12.5, peak:false},
+ {l:"SISAB · Stockholm schools", s:"9% electricity", v:9, peak:false},
+ {l:"Infosys · Pune campus", s:"7% in 6 months", v:7, peak:false}
+];
+
+const barsEl = document.getElementById('bars');
+const maxV = 30;
+BARS.forEach(b=>{
+  const row = document.createElement('div'); row.className='bar-row';
+  row.innerHTML = `<div class="lbl">${b.l}<small>${b.s}</small></div>
+    <div class="bar-track"><div class="bar-fill${b.peak?' peak':''}" style="width:${(b.v/maxV*100).toFixed(1)}%"></div><span class="bar-val">${b.val||b.s.split(' ')[0]}</span></div>`;
+  barsEl.appendChild(row);
+});
+
+const SECTORS = ["All","Buildings","Grids & power","Transport","Industry","Supply","Access & finance"];
+const filtersEl = document.getElementById('filters');
+const cardsEl = document.getElementById('cards');
+let active = "All";
+
+SECTORS.forEach(s=>{
+  const n = s==="All" ? CASES.length : CASES.filter(c=>c.sector===s).length;
+  const b=document.createElement('button'); b.className='chip'; b.type='button'; b.dataset.sector=s;
+  b.innerHTML = `${s}<span class="n">${n}</span>`;
+  b.setAttribute('aria-pressed', s===active);
+  b.addEventListener('click',()=>{ active=s;
+    filtersEl.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.sector===s));
+    render(); });
+  filtersEl.appendChild(b);
+});
+
+function render(){
+  let shown=0;
+  document.querySelectorAll('.card').forEach(c=>{
+    c.hidden = active!=="All" && c.dataset.sector!==active;
+    if(!c.hidden) shown++;
+  });
+  const note=document.getElementById('resultsNote');
+  note.textContent = active==="All"
+    ? `Showing all ${shown} deployments · 15 casebook + 12 observatory`
+    : `Showing ${shown} of ${CASES.length} deployments · ${active}`;
+}
+
+CASES.forEach(c=>{
+  const el=document.createElement('article'); el.className='card'; el.id=c.id; el.dataset.sector=c.sector;
+  el.innerHTML = `<div class="top">
+    <div class="tags"><span class="tag">${c.sector}</span>${c.obs?'<span class="tag obs">Observatory</span>':''}</div>
+    <div class="metric">${c.metric}</div>
+    <h3>${c.title}</h3>
+    <div class="who">${c.org}</div>
+    <p class="what">${c.what}</p>
+  </div>
+  <details><summary>Numbers &amp; source</summary><div class="detail">
+    <ul>${c.detail.map(d=>`<li>${d}</li>`).join('')}</ul>
+    <span class="cite">${c.cite}</span>
+  </div></details>`;
+  cardsEl.appendChild(el);
+});
+render();
+
+document.querySelectorAll('.card .top').forEach(top=>{
+  top.addEventListener('click',()=>{
+    if(getSelection().toString()) return;
+    const d=top.parentElement.querySelector('details'); if(d) d.open=!d.open;
+  });
+});
+
+const returnPill=document.getElementById('returnPill');
+let returnTarget=null, returnTimer=null;
+function showReturn(fromEl){
+  returnTarget=fromEl;
+  returnPill.classList.add('show');
+  clearTimeout(returnTimer);
+  returnTimer=setTimeout(()=>returnPill.classList.remove('show'), 25000);
+}
+returnPill.addEventListener('click',()=>{
+  returnPill.classList.remove('show');
+  if(returnTarget){ returnTarget.scrollIntoView({behavior:'smooth',block:'center'});
+    returnTarget.classList.remove('flash'); void returnTarget.offsetWidth; returnTarget.classList.add('flash'); }
+});
+
+document.querySelectorAll('[data-goto]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const t=document.getElementById(b.dataset.goto); if(!t) return;
+    if(active!=="All"){ active="All";
+      filtersEl.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.sector==="All"));
+      render(); }
+    t.scrollIntoView({behavior:'smooth',block:'center'});
+    t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash');
+    const d=t.querySelector('details'); if(d) d.open=true;
+    showReturn(b.closest('.pr'));
+  });
+});
+
+const sectionIds=['ledger','evidence','pays','india','principles'];
+const navLinks={}; document.querySelectorAll('nav.toc a').forEach(a=>{ navLinks[a.getAttribute('href').slice(1)]=a; });
+const spy=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      sectionIds.forEach(id=>navLinks[id] && navLinks[id].removeAttribute('aria-current'));
+      if(navLinks[en.target.id]) navLinks[en.target.id].setAttribute('aria-current','true');
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'});
+sectionIds.forEach(id=>{const s=document.getElementById(id); if(s) spy.observe(s);});
+
+addEventListener('keydown',e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea'||e.target.isContentEditable) return;
+  const i=parseInt(e.key,10);
+  if(i>=1 && i<=5){ const s=document.getElementById(sectionIds[i-1]); if(s) s.scrollIntoView({behavior:'smooth',block:'start'}); }
+});
+
+const themeBtn=document.getElementById('themeBtn');
+themeBtn.addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+});
+
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+
+document.getElementById('copyBtn').addEventListener('click',async e=>{
+  const lines=["FAIR ENERGY AND PUBLIC-BENEFIT PRINCIPLES FOR AI INFRASTRUCTURE","Draft — IRB · Energy, 12 August, Palais des Nations",""];
+  document.querySelectorAll('#prList .pr').forEach((p,i)=>{
+    lines.push(`${i+1}. ${p.querySelector('h3').textContent}`);
+    p.querySelectorAll('p').forEach(x=>lines.push(`   ${x.textContent}`));
+    lines.push("");
+  });
+  lines.push("Evidence base: IEA & IndiaAI Mission, Casebook on AI in Energy (2026, CC BY 4.0); IEA Energy and AI (2025); IEA Energy and AI Observatory.");
+  try{ await navigator.clipboard.writeText(lines.join("\n")); e.target.textContent="Copied ✓"; }
+  catch{ e.target.textContent="Copy failed — select & copy manually"; }
+  setTimeout(()=>e.target.textContent="Copy principles as text",2000);
+});
+</script>
