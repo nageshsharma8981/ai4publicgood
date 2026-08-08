@@ -256,7 +256,21 @@
   .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   /* digital twin */
+  .twin-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rem-ink);margin:2rem 0 .7rem}
+  .twin-label:first-of-type{margin-top:0}
   .twin{display:grid;grid-template-columns:minmax(300px,5fr) minmax(320px,6fr);gap:1rem;align-items:start}
+  .twin-wide{grid-column:1/-1}
+  .bill-line{font-size:.9rem;color:var(--ink);background:var(--adds-soft);border:1px solid var(--adds-line);border-radius:8px;padding:.7rem .9rem;margin-top:.4rem}
+  .bill-line b{color:var(--adds-ink)}
+  .day-chart{width:100%;height:auto;display:block;margin-top:.6rem}
+  .day-chart text{font-family:var(--mono);font-size:10px;fill:var(--ink3)}
+  .day-chart .axis{stroke:var(--line);stroke-width:1}
+  .day-chart .grid{stroke:var(--line);stroke-width:.5;opacity:.6}
+  .day-metric{font-size:.9rem;color:var(--ink);margin:.8rem 0 0}
+  .day-metric b{color:var(--rem-ink)}
+  .flex-controls{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap}
+  .flex-controls .seg{flex:0 0 220px}
+  .flex-controls .ctl{flex:1;min-width:200px;margin-bottom:0}
   @media (max-width:860px){.twin{grid-template-columns:1fr}}
   .twin-col{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:1.4rem 1.5rem}
   .twin-col h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:0 0 1.1rem}
@@ -532,8 +546,9 @@
   <div class="wrap">
     <span class="sec-num">05 · Digital twin</span>
     <h2>Model the deal, not just the debate</h2>
-    <p class="sec-sub">A working twin of an AI-infrastructure deal. Configure a hypothetical data centre for your region, then build the load-removal portfolio that would balance it — using per-unit coefficients from the deployments in the evidence base. Regulators can stress-test an interconnection request, communities can quantify "who pays", and operators can draft a public-benefit commitment.</p>
+    <p class="sec-sub">Three linked simulations of one AI-infrastructure deal. Configure a hypothetical data centre for your region; the twins compute the energy balance, the household bill impact, and the facility's behaviour across a day on the grid — using per-unit coefficients from the deployments in the evidence base. All three feed the generated term sheet.</p>
 
+    <p class="twin-label">Twin 01 · The energy balance</p>
     <div class="twin">
       <div class="twin-col" id="twinInputs">
         <h3>The deal on the table</h3>
@@ -600,19 +615,74 @@
           <button class="btn" id="tsCopy" type="button" hidden>Copy</button>
         </div>
         <div class="termsheet" id="termsheet"><pre id="tsText"></pre></div>
-        <details class="assump">
-          <summary>Model assumptions (illustrative — replace with your utility's data)</summary>
-          <ul>
-            <li>Facility energy = MW × 8 760 h × load factor. Peak ≈ nameplate MW.</li>
-            <li>India profile: ~1 200 kWh/household·yr, grid factor 0.71 tCO₂/MWh, utility throughput 20 TWh/yr, AT&amp;C losses mid-teens. Mature profile: ~9 500 kWh/household·yr, 0.35 tCO₂/MWh, 30 TWh/yr, losses ~6%.</li>
-            <li>Building lever: 1.2 GWh/building·yr average use × 22% AI savings (casebook cases 10–12, SISAB, Infosys). Peak: 0.05 MW shed per building.</li>
-            <li>Loss lever: 1 percentage point recovered = 1% of utility throughput (cases 3 &amp; 6).</li>
-            <li>Flexibility lever counts against peak, not energy (case 8, Voltalis).</li>
-            <li>This is a policy-illustration model, not an engineering study. Coefficients are self-reported deployment figures from the IEA Casebook (CC BY 4.0).</li>
-          </ul>
-        </details>
       </div>
     </div>
+
+    <p class="twin-label">Twin 02 · Who pays the bill</p>
+    <div class="twin">
+      <div class="twin-col">
+        <h3>The infrastructure behind the facility</h3>
+        <div class="ctl adds-ctl">
+          <label for="inCost">Network upgrade cost per MW <output id="outCost">$1.5M</output></label>
+          <input type="range" id="inCost" min="0.5" max="3" step="0.1" value="1.5">
+          <div class="hint">grid, transmission &amp; water works — adjust to your jurisdiction</div>
+        </div>
+        <div class="ctl adds-ctl">
+          <label for="inCust">Utility customer base <output id="outCust">8M households</output></label>
+          <input type="range" id="inCust" min="0.5" max="20" step="0.5" value="8">
+        </div>
+        <div class="ctl adds-ctl">
+          <label for="inYrs">Cost recovery period <output id="outYrs">20 years</output></label>
+          <input type="range" id="inYrs" min="10" max="25" step="1" value="20">
+        </div>
+      </div>
+      <div class="twin-col">
+        <h3>Who absorbs it</h3>
+        <div class="tstats">
+          <div class="tstat a"><div class="tk">Total network cost</div><div class="tv" id="tTotCost">—</div></div>
+          <div class="tstat a"><div class="tk">Socialised · per household</div><div class="tv" id="tBillMo">—</div></div>
+          <div class="tstat r"><div class="tk">Dedicated tariff · operator pays</div><div class="tv" id="tOpPay">—</div></div>
+          <div class="tstat r"><div class="tk">Households relieved</div><div class="tv" id="tCustN">—</div></div>
+        </div>
+        <p class="bill-line" id="billLine" role="status">—</p>
+      </div>
+    </div>
+
+    <p class="twin-label">Twin 03 · A day on the grid — flexibility</p>
+    <div class="twin">
+      <div class="twin-col twin-wide">
+        <div class="flex-controls">
+          <div class="ctl">
+            <label>Operating mode</label>
+            <div class="seg" id="modeSeg" role="group" aria-label="Facility operating mode">
+              <button type="button" data-mode="rigid" aria-pressed="true">Firm 24/7</button>
+              <button type="button" data-mode="flex" aria-pressed="false">Grid-flexible</button>
+            </div>
+          </div>
+          <div class="ctl">
+            <label for="inFlexPct">Peak-hour compute shifted <output id="outFlexPct">30%</output></label>
+            <input type="range" id="inFlexPct" min="0" max="50" step="5" value="30">
+            <div class="hint">workload moved from the evening peak into the solar window</div>
+          </div>
+        </div>
+        <svg class="day-chart" id="dayChart" viewBox="0 0 720 280" role="img" aria-label="24-hour chart of system demand, solar output and the data centre's load, comparing firm 24/7 operation with grid-flexible operation"></svg>
+        <p class="day-metric" id="peakLine">—</p>
+      </div>
+    </div>
+
+    <details class="assump">
+      <summary>Model assumptions (illustrative — replace with your utility's data)</summary>
+      <ul>
+        <li>Facility energy = MW × 8 760 h × load factor. Peak ≈ nameplate MW.</li>
+        <li>India profile: ~1 200 kWh/household·yr, grid factor 0.71 tCO₂/MWh, utility throughput 20 TWh/yr, system peak ~3.8 GW, AT&amp;C losses mid-teens, ₹83/$. Mature profile: ~9 500 kWh/household·yr, 0.35 tCO₂/MWh, 30 TWh/yr, peak ~6 GW, losses ~6%.</li>
+        <li>Building lever: 1.2 GWh/building·yr average use × 22% AI savings (casebook cases 10–12, SISAB, Infosys). Peak: 0.05 MW shed per building.</li>
+        <li>Loss lever: 1 percentage point recovered = 1% of utility throughput (cases 3 &amp; 6).</li>
+        <li>Flexibility levers count against peak, not energy (case 8, Voltalis).</li>
+        <li>Twin 02: network upgrade costs for large loads span roughly $0.5–3M per MW depending on jurisdiction and grid headroom; straight-line recovery, no financing cost. Socialised recovery spreads cost across all customers; a dedicated tariff assigns it to the causer.</li>
+        <li>Twin 03: stylised demand and solar curves (evening-peak system); flexible mode moves the selected share of the facility's evening-peak (18:00–22:00) draw into the 09:00–16:00 solar window, energy-neutral across the day.</li>
+        <li>This is a policy-illustration model, not an engineering study. Deployment coefficients are self-reported figures from the IEA Casebook (CC BY 4.0).</li>
+      </ul>
+    </details>
   </div>
 </section>
 
@@ -886,8 +956,8 @@ if(prevB){
 
 /* digital twin */
 const REGIONS={
-  india:{name:'India distribution utility', hhKwh:1200, ef:0.71, throughputGWh:20000, lossMaxPts:10},
-  mature:{name:'Mature grid', hhKwh:9500, ef:0.35, throughputGWh:30000, lossMaxPts:2}
+  india:{name:'India distribution utility', hhKwh:1200, ef:0.71, throughputGWh:20000, lossMaxPts:10, fx:83, curr:'₹', custDef:8, sysPeakMW:3800},
+  mature:{name:'Mature grid', hhKwh:9500, ef:0.35, throughputGWh:30000, lossMaxPts:2, fx:1, curr:'$', custDef:1.5, sysPeakMW:6000}
 };
 let region='india';
 const $=id=>document.getElementById(id);
@@ -931,6 +1001,97 @@ function twinRender(){
   $('sc-net').classList.toggle('ok',s.ratio>=1);
   $('sc-flex').classList.toggle('ok',s.flexRatio>=0.5);
   document.querySelectorAll('#score input[type=checkbox]').forEach(cb=>cb.closest('.score-row').classList.toggle('ok',cb.checked));
+  billRender(); dayRender();
+}
+
+/* Twin 02 — who pays the bill */
+function money(usdM,R){
+  if(R.curr==='₹'){ const cr=usdM*R.fx/10; return cr>=100?'₹'+fmt(cr)+' cr':'₹'+fmt1(cr)+' cr'; }
+  return usdM>=1000?'$'+fmt1(usdM/1000)+'B':'$'+fmt(usdM)+'M';
+}
+function billState(){
+  const R=REGIONS[region], mw=+$('inMW').value;
+  const costM=+$('inCost').value*mw;
+  const cust=+$('inCust').value*1e6, yrs=+$('inYrs').value;
+  const perMoUSD=costM*1e6/(cust*yrs*12);
+  return {R,mw,costM,cust,yrs,perMoUSD,perMoLocal:perMoUSD*R.fx,opYrM:costM/yrs};
+}
+function billRender(){
+  if(!$('inCost')) return;
+  const s=billState();
+  $('outCost').textContent='$'+fmt1(+$('inCost').value)+'M';
+  $('outCust').textContent=fmt1(+$('inCust').value)+'M households';
+  $('outYrs').textContent=s.yrs+' years';
+  $('tTotCost').textContent=money(s.costM,s.R);
+  $('tBillMo').textContent=(s.R.curr==='₹'?'₹'+fmt1(s.perMoLocal):'$'+fmt1(s.perMoUSD))+' /mo';
+  $('tOpPay').textContent=money(s.opYrM,s.R)+' /yr';
+  $('tCustN').textContent=fmt1(s.cust/1e6)+'M';
+  $('billLine').innerHTML='Under socialised recovery, <b>every household pays '+(s.R.curr==='₹'?'₹'+fmt1(s.perMoLocal):'$'+fmt1(s.perMoUSD))+' a month for '+s.yrs+' years</b> to connect this facility. Under a dedicated tariff class, households pay nothing — the operator carries '+money(s.opYrM,s.R)+' a year.';
+}
+
+/* Twin 03 — a day on the grid */
+const DEMAND=[0.55,0.52,0.50,0.50,0.52,0.58,0.66,0.72,0.76,0.78,0.80,0.82,0.80,0.78,0.76,0.76,0.80,0.88,0.96,1.00,0.98,0.90,0.75,0.62,0.55];
+const SOLAR=[0,0,0,0,0,0.04,0.15,0.32,0.52,0.70,0.85,0.95,1.00,0.96,0.85,0.68,0.46,0.22,0.05,0,0,0,0,0,0];
+let dayMode='rigid', dcCurve=null, dcTarget=null, dayRaf=null;
+function dcProfile(){
+  const mw=+$('inMW').value, pct=+$('inFlexPct').value/100;
+  const arr=Array(25).fill(mw);
+  if(dayMode==='flex'&&pct>0){
+    const shed=mw*pct, moved=shed*5/8;
+    for(let h=18;h<=22;h++) arr[h]=mw-shed;
+    for(let h=9;h<=16;h++) arr[h]=mw+moved;
+  }
+  return arr;
+}
+function dayDraw(){
+  const svg=$('dayChart'); if(!svg) return;
+  const R=REGIONS[region], mw=+$('inMW').value;
+  const L=44,T=16,W=720-58,H=280-52;
+  const dem=DEMAND.map(d=>d*R.sysPeakMW);
+  const solarCap=R.sysPeakMW*0.5;
+  const ymax=(R.sysPeakMW+mw)*1.05;
+  const X=h=>L+h/24*W, Y=v=>T+H-(v/ymax)*H;
+  const path=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+  const dc=dcCurve||dcProfile();
+  const tot=dem.map((d,i)=>d+dc[i]);
+  const solar=SOLAR.map(f=>f*solarCap);
+  const totRigid=dem.map(d=>d+mw);
+  const yt=[0,2000,4000,6000].filter(v=>v<ymax);
+  svg.innerHTML=
+    '<rect x="'+X(18)+'" y="'+T+'" width="'+(X(22)-X(18))+'" height="'+H+'" fill="var(--adds-soft)" opacity=".55"/>'+
+    yt.map(v=>'<line class="grid" x1="'+L+'" y1="'+Y(v)+'" x2="'+(L+W)+'" y2="'+Y(v)+'"/><text x="'+(L-6)+'" y="'+(Y(v)+3)+'" text-anchor="end">'+(v/1000)+'G</text>').join('')+
+    '<path d="'+path(solar)+' L'+X(24)+' '+Y(0)+' L'+X(0)+' '+Y(0)+' Z" fill="var(--rem-soft)" opacity=".8"/>'+
+    '<path d="'+path(solar)+'" fill="none" stroke="var(--rem)" stroke-width="1.4" opacity=".7"/>'+
+    (dayMode==='flex'?'<path d="'+path(totRigid)+'" fill="none" stroke="var(--adds)" stroke-width="1.2" stroke-dasharray="4 4" opacity=".45"/>':'')+
+    '<path d="'+path(dem)+'" fill="none" stroke="var(--ink3)" stroke-width="1.4" stroke-dasharray="1.5 3"/>'+
+    '<path d="'+path(tot)+'" fill="none" stroke="var(--adds)" stroke-width="2.2"/>'+
+    '<line class="axis" x1="'+L+'" y1="'+(T+H)+'" x2="'+(L+W)+'" y2="'+(T+H)+'"/>'+
+    [0,6,12,18,24].map(h=>'<text x="'+X(h)+'" y="'+(T+H+16)+'" text-anchor="middle">'+String(h).padStart(2,'0')+':00</text>').join('')+
+    '<text x="'+X(20)+'" y="'+(T+10)+'" text-anchor="middle">evening peak</text>'+
+    '<text x="'+X(12.5)+'" y="'+(Y(solar[12])+14)+'" text-anchor="middle" fill="var(--rem-ink)">solar</text>'+
+    '<text x="'+(X(2))+'" y="'+(Y(dem[2])-6)+'">system demand</text>'+
+    '<text x="'+(X(2))+'" y="'+(Y(tot[2])-6)+'" fill="var(--adds-ink)">demand + data centre</text>';
+}
+function dayRender(){
+  if(!$('dayChart')) return;
+  $('outFlexPct').textContent=$('inFlexPct').value+'%';
+  const mw=+$('inMW').value, pct=+$('inFlexPct').value/100;
+  dcTarget=dcProfile();
+  if(RM||!dcCurve){ dcCurve=dcTarget.slice(); dayDraw(); }
+  else if(!dayRaf){
+    const step=()=>{
+      let done=true;
+      dcCurve=dcCurve.map((v,i)=>{ const d=dcTarget[i]-v; if(Math.abs(d)>1) done=false; return v+d*0.25; });
+      dayDraw();
+      dayRaf=done?null:requestAnimationFrame(step);
+      if(done) dcCurve=dcTarget.slice();
+    };
+    dayRaf=requestAnimationFrame(step);
+  }
+  const shed=dayMode==='flex'?Math.round(mw*pct):0;
+  $('peakLine').innerHTML=dayMode==='flex'
+    ? 'At the 19:00 system peak this facility adds <b>'+fmt(mw-shed)+' MW</b> instead of '+fmt(mw)+' MW — flexibility removes <b>'+fmt(shed)+' MW of peak stress</b>, shifted into the solar window.'
+    : 'Running firm 24/7, this facility adds <b>'+fmt(mw)+' MW</b> right through the 19:00 system peak — when the grid is most stressed and most carbon-intensive.';
 }
 if($('inMW')){
   ['inMW','inLF','inBld','inLoss','inFlex'].forEach(id=>$(id).addEventListener('input',twinRender));
@@ -939,7 +1100,16 @@ if($('inMW')){
     region=b.dataset.region;
     document.querySelectorAll('#regionSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
     if(+$('inLoss').value>REGIONS[region].lossMaxPts) $('inLoss').value=REGIONS[region].lossMaxPts;
+    if($('inCust')) $('inCust').value=REGIONS[region].custDef;
+    dcCurve=null;
     twinRender();
+  }));
+  ['inCost','inCust','inYrs'].forEach(id=>$(id)&&$(id).addEventListener('input',billRender));
+  if($('inFlexPct')) $('inFlexPct').addEventListener('input',dayRender);
+  document.querySelectorAll('#modeSeg button').forEach(b=>b.addEventListener('click',()=>{
+    dayMode=b.dataset.mode;
+    document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    dayRender();
   }));
   $('tsBtn').addEventListener('click',()=>{
     const s=twinState();
@@ -961,6 +1131,9 @@ if($('inMW')){
 '  • '+fmt(s.flexMW)+' MW flexible demand under AI control ('+Math.round(s.flexRatio*100)+'% of facility peak)','',
 'NET-LOAD RATIO: '+Math.round(s.ratio*100)+'% of added load offset'+(s.ratio>=1?' — deal balances':' — gap remains with ratepayers/communities'),
 'Emissions avoided by portfolio: '+(s.co2Rem>=1?fmt1(s.co2Rem)+' Mt':fmt(s.co2Rem*1000)+' kt')+' CO₂/yr','',
+(()=>{const b=billState(); return 'COST ALLOCATION\n  Network upgrades ≈ '+money(b.costM,b.R)+'. Socialised recovery would cost every household '+(b.R.curr==='₹'?'₹'+fmt1(b.perMoLocal):'$'+fmt1(b.perMoUSD))+'/month for '+b.yrs+' years;\n  a dedicated tariff class assigns '+money(b.opYrM,b.R)+'/yr to the operator instead.'})(),'',
+(()=>{const mw=+$('inMW').value, pct=+$('inFlexPct').value/100; const shed=dayMode==='flex'?Math.round(mw*pct):0;
+  return 'GRID BEHAVIOUR\n  '+(dayMode==='flex'?'Grid-flexible operation: '+fmt(shed)+' MW of evening-peak draw shifted into the solar window ('+Math.round(pct*100)+'% of peak load).':'Firm 24/7 operation: full '+fmt(mw)+' MW drawn through the evening system peak — flexibility commitment not yet made.')})(),'',
 'COMMITMENTS'+(committed.length?':':' — none selected'),...committed,
 ...(missing.length?['','OPEN ITEMS:',...missing]:[]),'',
 'Illustrative model — coefficients from IEA & IndiaAI Casebook on AI in Energy (2026, CC BY 4.0)',
