@@ -44,9 +44,6 @@
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
   ::selection{background:var(--rem-soft);color:var(--ink)}
 
-  .strip{background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:.55rem 1.25rem;display:flex;gap:.5rem 1.5rem;flex-wrap:wrap;justify-content:center}
-  .strip span{white-space:nowrap;opacity:.92}
-
   .wrap{max-width:1060px;margin:0 auto;padding:0 1.25rem}
 
   header.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--line)}
@@ -191,7 +188,7 @@
   @keyframes flash{0%{background:var(--rem-soft)}100%{background:var(--surface)}}
 
   @media print{
-    .strip,nav.toc,.filters,.results-note,.actions,.card details,.return-pill{display:none!important}
+    nav.toc,.filters,.results-note,.actions,.card details,.return-pill{display:none!important}
     body{background:#fff;color:#111}
     section{border:none;padding:1.2rem 0;break-inside:avoid-page}
     .card,.pr,.pay,.tile,.col,.chart-card{box-shadow:none;border:1px solid #ccc}
@@ -199,10 +196,6 @@
     .bar-fill,.tag,.ev,.col-h,.pr::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   }
 </style>
-
-<div class="strip" role="doc-subtitle">
-  <span>IRB · Energy</span><span>Wed 12 August · 12:45–13:45</span><span>Room IX · Palais des Nations</span><span>Evidence briefing</span>
-</div>
 
 <header class="hero">
   <div class="wrap">
