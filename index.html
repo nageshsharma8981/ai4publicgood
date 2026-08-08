@@ -46,7 +46,26 @@
 
   .wrap{max-width:1060px;margin:0 auto;padding:0 1.25rem}
 
-  header.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--line)}
+  .hero-stage{height:200vh;--p:0;border-bottom:1px solid var(--line)}
+  header.hero{position:sticky;top:0;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:2rem 0}
+  header.hero .wrap{width:100%}
+  h1 .adds-w{opacity:calc(1 - var(--p)*0.62)}
+  h1 .rem-w{opacity:calc(0.38 + var(--p)*0.62)}
+  .hero .tile.rem{opacity:calc(0.72 + var(--p)*0.28);transform:scale(calc(0.975 + var(--p)*0.025))}
+  .hero .tile.adds{opacity:calc(1 - var(--p)*0.18)}
+  .load-meter{display:flex;gap:3px;height:6px;margin:0 0 2rem;max-width:560px}
+  .load-meter .lm-adds{background:var(--adds);border-radius:3px;width:calc(78% - var(--p)*56%)}
+  .load-meter .lm-rem{background:var(--rem);border-radius:3px;width:calc(22% + var(--p)*56%)}
+  .lm-cap{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:flex;justify-content:space-between;max-width:560px;margin:.45rem 0 1.6rem}
+  .scroll-cue{position:absolute;left:50%;bottom:1.2rem;transform:translateX(-50%);font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);opacity:calc(1 - var(--p)*4)}
+  @media (max-width:680px){.hero-stage{height:165vh}}
+  @media (prefers-reduced-motion: reduce){
+    .hero-stage{height:auto}
+    header.hero{position:static;min-height:0;padding:3.5rem 0 2.5rem}
+    h1 .adds-w,h1 .rem-w,.hero .tile.adds,.hero .tile.rem{opacity:1;transform:none}
+    .load-meter .lm-adds{width:50%}.load-meter .lm-rem{width:50%}
+    .scroll-cue{display:none}
+  }
   .eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem}
   h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,4.5vw,3.1rem);line-height:1.12;margin:0 0 1rem;text-wrap:balance;max-width:21ch}
   h1 .adds-w{color:var(--adds-ink)} h1 .rem-w{color:var(--rem-ink)}
@@ -85,6 +104,23 @@
   .sec-sub{color:var(--ink2);max-width:68ch;margin:0 0 1.8rem}
   .sec-num{font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:.5rem}
 
+  .wipe{position:relative;height:240px;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:1rem;cursor:ew-resize;--x:50%;touch-action:pan-y;box-shadow:var(--shadow)}
+  .wipe-layer{position:absolute;inset:0;display:flex;align-items:center}
+  .wipe-adds{background:var(--adds-soft)}
+  .wipe-rem{background:var(--rem-soft);clip-path:inset(0 0 0 var(--x))}
+  .wl-inner{display:flex;flex-direction:column;gap:.25rem;padding:0 clamp(1rem,4vw,2.4rem)}
+  .wipe-rem .wl-inner{margin-left:auto;align-items:flex-end;text-align:right}
+  .wl-k{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+  .wipe-adds .wl-k{color:var(--adds-ink)} .wipe-rem .wl-k{color:var(--rem-ink)}
+  .wl-big{font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,4.5vw,2.5rem);line-height:1.1}
+  .wipe-adds .wl-big{color:var(--adds-ink)} .wipe-rem .wl-big{color:var(--rem-ink)}
+  .wl-s{font-size:.82rem;color:var(--ink2);max-width:24ch}
+  .wipe-rem .wl-s{max-width:26ch}
+  .wipe-handle{position:absolute;top:0;bottom:0;left:var(--x);width:2px;background:var(--ink);transform:translateX(-1px);pointer-events:none}
+  .wipe-handle span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--ink2)}
+  .wipe:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .wipe-hint{font-family:var(--mono);font-size:.68rem;color:var(--ink3);margin:-.4rem 0 1rem;text-align:center}
+
   .ledger{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
   @media (max-width:760px){.ledger{grid-template-columns:1fr}}
   .col{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
@@ -115,6 +151,21 @@
   .chart-legend .sw{display:inline-block;width:14px;height:10px;background:var(--rem);border-radius:2px;margin-right:.35rem;vertical-align:baseline}
   .chart-legend .sw.o{background:transparent;border:1.5px solid var(--rem)}
 
+  .para{overflow:hidden;padding:2.4rem 0 2.6rem;border-bottom:1px solid var(--line);background:var(--surface2)}
+  .para-rail{display:flex;gap:3.5rem;white-space:nowrap;will-change:transform;font-family:var(--serif);font-weight:600}
+  .para-rail span{flex:0 0 auto}
+  .para .r1{font-size:clamp(1.5rem,3.6vw,2.3rem);color:var(--ink)}
+  .para .r1 b{color:var(--rem-ink);font-weight:600}
+  .para .r2{font-size:clamp(1rem,2.4vw,1.4rem);color:var(--ink3);margin-top:.9rem}
+  .para .r2 b{color:var(--ink2);font-weight:600}
+
+  .explore-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+  .snav{display:flex;gap:.4rem;flex:0 0 auto}
+  .snav button{width:40px;height:40px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer;font-size:1.05rem;line-height:1}
+  .snav button:hover:not(:disabled){color:var(--ink);border-color:var(--ink3)}
+  .snav button:disabled{opacity:.35;cursor:default}
+  .snav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
   .filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem}
   .chip .n{opacity:.55;margin-left:.3rem}
   .results-note{font-family:var(--mono);font-size:.72rem;color:var(--ink3);margin:0 0 1.2rem}
@@ -123,9 +174,14 @@
   .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
-  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;scroll-margin-top:70px;transition:transform .18s ease,box-shadow .18s ease}
+  .cards{display:grid;grid-auto-flow:column;grid-auto-columns:min(330px,82vw);gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.25rem .25rem 1.1rem;position:relative;scrollbar-width:thin}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;scroll-margin-top:70px;scroll-snap-align:start;transition:transform .18s ease,box-shadow .18s ease}
   .card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(23,33,30,.06),0 10px 28px rgba(23,33,30,.09)}
+  @media (prefers-reduced-motion: no-preference){
+    .card{opacity:0}
+    .card.in{opacity:1;animation:cardIn .45s ease backwards;animation-delay:var(--d,0ms)}
+  }
+  @keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
   .card[hidden]{display:none}
   .card .top{padding:1.1rem 1.25rem .9rem;flex:1;cursor:pointer}
   .card .tags{display:flex;gap:.4rem;margin-bottom:.7rem;flex-wrap:wrap}
@@ -188,7 +244,11 @@
   @keyframes flash{0%{background:var(--rem-soft)}100%{background:var(--surface)}}
 
   @media print{
-    nav.toc,.filters,.results-note,.actions,.card details,.return-pill{display:none!important}
+    nav.toc,.filters,.results-note,.actions,.card details,.return-pill,.snav,.para,.wipe,.wipe-hint,.scroll-cue{display:none!important}
+    .hero-stage{height:auto}
+    header.hero{position:static;min-height:0}
+    .card{opacity:1!important}
+    .cards{display:grid;grid-auto-flow:row;grid-template-columns:repeat(2,1fr);overflow:visible}
     body{background:#fff;color:#111}
     section{border:none;padding:1.2rem 0;break-inside:avoid-page}
     .card,.pr,.pay,.tile,.col,.chart-card{box-shadow:none;border:1px solid #ccc}
@@ -197,11 +257,14 @@
   }
 </style>
 
+<div class="hero-stage" id="heroStage">
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow">AI and climate change · Who pays for big AI's energy demand?</p>
     <h1>The kind of AI that <span class="adds-w">adds load</span> — and the kind that <span class="rem-w">removes it</span>.</h1>
     <p class="lede">The AI conversation is dominated by the electricity that hyperscale data centres will consume. But there is a second, documented story: AI already deployed <strong>inside</strong> the energy system is measurably cutting demand, waste and emissions. This briefing sets both sides of the ledger, then derives <strong>Fair Energy and Public-Benefit Principles for AI Infrastructure</strong> from the evidence.</p>
+    <div class="load-meter" aria-hidden="true"><div class="lm-adds"></div><div class="lm-rem"></div></div>
+    <div class="lm-cap" aria-hidden="true"><span>load added</span><span>load removed</span></div>
     <div class="hero-stats">
       <div class="tile adds">
         <div class="k">The load AI adds</div>
@@ -215,7 +278,9 @@
       </div>
     </div>
   </div>
+  <div class="scroll-cue">scroll ▾</div>
 </header>
+</div>
 
 <nav class="toc" aria-label="Sections">
   <div class="wrap">
@@ -234,6 +299,12 @@
     <span class="sec-num">01 · Framing</span>
     <h2>Two entries in the same ledger</h2>
     <p class="sec-sub">Both columns are real. The policy question is not whether AI uses energy — it is whether the balance of deployment, and of who finances each column, is fair.</p>
+    <div class="wipe" id="wipe" role="slider" tabindex="0" aria-label="Sweep to compare the load AI adds against the load AI can remove" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      <div class="wipe-layer wipe-adds"><div class="wl-inner"><span class="wl-k">▲ What big AI adds</span><span class="wl-big">≈ a Japan</span><span class="wl-s">of data-centre electricity demand by 2030</span></div></div>
+      <div class="wipe-layer wipe-rem"><div class="wl-inner"><span class="wl-k">▼ What deployed AI removes</span><span class="wl-big">≈ an Indonesia</span><span class="wl-s">of annual energy, savable by 2035 with commercial AI optimisation</span></div></div>
+      <div class="wipe-handle"><span>◂▸</span></div>
+    </div>
+    <p class="wipe-hint">move the cursor · drag on touch · arrow keys</p>
     <div class="ledger">
       <div class="col adds">
         <div class="col-h">▲ AI that adds load</div>
@@ -269,11 +340,19 @@
     <span class="sec-num">02 · Evidence base</span>
     <h2>27 deployments, measured outcomes</h2>
     <p class="sec-sub">Case studies from the IEA × IndiaAI Mission <em>Casebook on AI in Energy</em> (15 peer-screened deployments, published Feb 2026) and the IEA Energy and AI Observatory. Figures are as reported by the deploying organisations. Filter by sector; expand any card for the underlying numbers.</p>
-    <div class="filters" role="group" aria-label="Filter cases by sector" id="filters"></div>
+    <div class="explore-head">
+      <div class="filters" role="group" aria-label="Filter cases by sector" id="filters"></div>
+      <div class="snav"><button id="prevCard" type="button" aria-label="Scroll cases back">‹</button><button id="nextCard" type="button" aria-label="Scroll cases forward">›</button></div>
+    </div>
     <p class="results-note" id="resultsNote" aria-live="polite"></p>
-    <div class="cards" id="cards"></div>
+    <div class="cards" id="cards" tabindex="0" aria-label="Case study slider — scrolls horizontally"></div>
   </div>
 </section>
+
+<div class="para" aria-hidden="true" id="para">
+  <div class="para-rail r1" id="rail1"></div>
+  <div class="para-rail r2" id="rail2"></div>
+</div>
 
 <section id="pays">
   <div class="wrap">
@@ -538,11 +617,88 @@ document.querySelectorAll('[data-goto]').forEach(b=>{
       filtersEl.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.sector==="All"));
       render(); }
     t.scrollIntoView({behavior:'smooth',block:'center'});
+    if(t.classList.contains('card')) cardsEl.scrollTo({left:Math.max(0,t.offsetLeft-16),behavior:'smooth'});
     t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash');
     const d=t.querySelector('details'); if(d) d.open=true;
     showReturn(b.closest('.pr'));
   });
 });
+
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* scroll-triggered hero + horizontal parallax (transform/custom-prop only, rAF-batched) */
+const stageEl=document.getElementById('heroStage');
+const paraEl=document.getElementById('para'), rail1=document.getElementById('rail1'), rail2=document.getElementById('rail2');
+const R1=['<span><b>2.7 Mt</b> CO₂e avoided — routing</span>','<span><b>62 000 t</b> CO₂/yr — steel</span>','<span><b>2 GW</b> flexible — homes</span>','<span><b>5 GWh</b> saved — buildings</span>','<span><b>1 800 t</b> CO₂/yr — rails</span>'];
+const R2=['<span><b>−22%</b> peak charges</span>','<span><b>−25–30%</b> building energy</span>','<span><b>~95%</b> forecast reliability</span>','<span><b>−50%</b> deviation penalties</span>','<span><b>12% → 1.2%</b> rework</span>'];
+if(rail1){ rail1.innerHTML=R1.concat(R1,R1).join(''); rail2.innerHTML=R2.concat(R2,R2).join(''); }
+let ticking=false;
+function onScrollFx(){
+  if(ticking) return; ticking=true;
+  requestAnimationFrame(()=>{ ticking=false;
+    if(stageEl && !RM){
+      const max=stageEl.offsetHeight-innerHeight;
+      const p=Math.min(1,Math.max(0,(scrollY-stageEl.offsetTop)/(max>0?max:1)));
+      stageEl.style.setProperty('--p',p.toFixed(3));
+    }
+    if(paraEl && !RM){
+      const r=paraEl.getBoundingClientRect();
+      if(r.bottom>0 && r.top<innerHeight){
+        const off=(innerHeight-r.top)*0.14;
+        rail1.style.transform=`translateX(${(-off).toFixed(1)}px)`;
+        rail2.style.transform=`translateX(${(off-320).toFixed(1)}px)`;
+      }
+    }
+    updateSnav();
+  });
+}
+addEventListener('scroll',onScrollFx,{passive:true});
+addEventListener('resize',onScrollFx,{passive:true});
+
+/* cursor-controlled wipe */
+const wipeEl=document.getElementById('wipe');
+let wx=50,wtx=50,wraf=null;
+function wApply(){ wipeEl.style.setProperty('--x',wx.toFixed(2)+'%'); wipeEl.setAttribute('aria-valuenow',Math.round(wx)); }
+function wTick(){ wx+=(wtx-wx)*0.2; wApply(); if(Math.abs(wtx-wx)>0.15){ wraf=requestAnimationFrame(wTick); } else { wx=wtx; wApply(); wraf=null; } }
+function wSet(clientX){
+  const r=wipeEl.getBoundingClientRect();
+  wtx=Math.min(96,Math.max(4,(clientX-r.left)/r.width*100));
+  if(RM){ wx=wtx; wApply(); } else if(!wraf){ wraf=requestAnimationFrame(wTick); }
+}
+if(wipeEl){
+  wipeEl.addEventListener('pointermove',e=>wSet(e.clientX));
+  wipeEl.addEventListener('pointerdown',e=>{ wipeEl.setPointerCapture(e.pointerId); wSet(e.clientX); });
+  wipeEl.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+      e.preventDefault();
+      wtx=Math.min(96,Math.max(4,wtx+(e.key==='ArrowRight'?6:-6)));
+      if(RM||!wraf){ if(RM){wx=wtx;wApply();} else wraf=requestAnimationFrame(wTick); }
+    }
+  });
+}
+
+/* animated column slider */
+const prevB=document.getElementById('prevCard'), nextB=document.getElementById('nextCard');
+function updateSnav(){
+  if(!cardsEl||!prevB) return;
+  prevB.disabled=cardsEl.scrollLeft<=4;
+  nextB.disabled=cardsEl.scrollLeft>=cardsEl.scrollWidth-cardsEl.clientWidth-4;
+}
+if(prevB){
+  prevB.addEventListener('click',()=>cardsEl.scrollBy({left:-cardsEl.clientWidth*0.85,behavior:RM?'auto':'smooth'}));
+  nextB.addEventListener('click',()=>cardsEl.scrollBy({left:cardsEl.clientWidth*0.85,behavior:RM?'auto':'smooth'}));
+  cardsEl.addEventListener('scroll',updateSnav,{passive:true});
+}
+
+/* staggered card entrance */
+const allCards=[...document.querySelectorAll('.card')];
+if(!RM && 'IntersectionObserver' in window){
+  const cio=new IntersectionObserver(es=>{es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); cio.unobserve(en.target); } })},{root:null,threshold:0.15});
+  allCards.forEach((c,i)=>{ c.style.setProperty('--d',(i%4*45)+'ms'); cio.observe(c); });
+}else{
+  allCards.forEach(c=>c.classList.add('in'));
+}
+onScrollFx();
 
 const sectionIds=['ledger','evidence','pays','india','principles'];
 const navLinks={}; document.querySelectorAll('nav.toc a').forEach(a=>{ navLinks[a.getAttribute('href').slice(1)]=a; });
