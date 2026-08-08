@@ -1,4 +1,4 @@
-<title>The Load Ledger · Who Pays for Big AI's Energy Demand?</title>
+<title>AI for Public Good · The Load Ledger — Who Pays for Big AI's Energy Demand?</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="AI for Public Good — evidence on the AI that adds grid load vs the AI that removes it, plus a digital twin that models a fair data-centre deal for your grid.">
 <style>
@@ -46,6 +46,28 @@
   ::selection{background:var(--rem-soft);color:var(--ink)}
 
   .wrap{max-width:1060px;margin:0 auto;padding:0 1.25rem}
+
+  .brand-rule{height:3px;background:linear-gradient(90deg,var(--adds) 0%,var(--adds) 42%,var(--rem) 58%,var(--rem) 100%)}
+  .masthead{padding:.8rem 0;border-bottom:1px solid var(--line)}
+  .masthead .wm{font-family:var(--mono);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);font-weight:600}
+  .masthead .wm b{color:var(--rem-ink);font-weight:600}
+  .masthead .mt-right{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+  @media (max-width:560px){.masthead .mt-right{display:none}}
+
+  .uvp-band{border-bottom:1px solid var(--line);background:var(--surface);padding:2.6rem 0}
+  .uvp-line{font-family:var(--serif);font-weight:600;font-size:clamp(1.25rem,2.6vw,1.7rem);line-height:1.3;max-width:34ch;margin:0 0 1.6rem;text-wrap:balance}
+  .uvp-line em{font-style:normal;color:var(--rem-ink)}
+  .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-bottom:1.6rem}
+  .pillar{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.25rem;background:var(--bg);transition:transform .18s ease,border-color .18s ease}
+  .pillar:hover{transform:translateY(-2px);border-color:var(--rem-line)}
+  .pillar:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .pillar .pn{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rem-ink);display:block;margin-bottom:.45rem}
+  .pillar h3{font-family:var(--serif);font-size:1.08rem;font-weight:600;margin:0 0 .3rem}
+  .pillar p{margin:0;font-size:.84rem;color:var(--ink2)}
+  .aud-row{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;align-items:baseline;border-top:1px solid var(--line);padding-top:1.2rem}
+  .aud-row .ak{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);flex:0 0 auto}
+  .aud-row span{font-size:.82rem;color:var(--ink2)}
+  .aud-row span b{color:var(--ink);font-weight:600}
 
   .hero-stage{height:200vh;--p:0;border-bottom:1px solid var(--line)}
   header.hero{position:sticky;top:0;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:2rem 0}
@@ -303,6 +325,12 @@
   }
 </style>
 
+<div class="brand-rule" aria-hidden="true"></div>
+<div class="masthead"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;width:100%">
+  <span class="wm">AI for <b>Public Good</b></span>
+  <span class="mt-right">Open evidence &amp; tools · ai4publicgood.com</span>
+</div></div>
+
 <div class="hero-stage" id="heroStage">
 <header class="hero">
   <div class="wrap">
@@ -340,6 +368,36 @@
     <button id="themeBtn" type="button" aria-label="Toggle theme">◐ theme</button>
   </div>
 </nav>
+
+<div class="uvp-band">
+  <div class="wrap">
+    <p class="uvp-line">The first open tool that turns AI's energy demand into a <em>fair, auditable deal</em> — not a debate.</p>
+    <div class="pillars">
+      <a class="pillar" href="#evidence">
+        <span class="pn">01 · Evidence</span>
+        <h3>27 measured deployments</h3>
+        <p>IEA-published casebook and observatory figures — what load-removing AI already delivers, with sources and caveats disclosed.</p>
+      </a>
+      <a class="pillar" href="#twin">
+        <span class="pn">02 · Balance test</span>
+        <h3>A digital twin of the deal</h3>
+        <p>Configure any data centre and host grid; the twin computes whether the deal is net-adding — and what portfolio would balance it.</p>
+      </a>
+      <a class="pillar" href="#principles">
+        <span class="pn">03 · Accountability</span>
+        <h3>A term sheet you can hold</h3>
+        <p>Seven Fair Energy &amp; Public-Benefit Principles, exported per-deal as a draft commitment any party can be measured against.</p>
+      </a>
+    </div>
+    <div class="aud-row">
+      <span class="ak">Built for</span>
+      <span><b>Regulators</b> — stress-test an interconnection request</span>
+      <span><b>Utilities</b> — size the negawatt program</span>
+      <span><b>Communities</b> — quantify who pays</span>
+      <span><b>AI operators</b> — arrive with commitments, not promises</span>
+    </div>
+  </div>
+</div>
 
 <section id="ledger">
   <div class="wrap">
@@ -620,6 +678,7 @@
     <p><strong>Sources.</strong> IEA &amp; IndiaAI Mission, <em>Casebook on AI in Energy</em> (Feb 2026, CC BY 4.0) — 15 case studies selected from 72 submissions by an inter-ministerial committee (MNRE, Ministry of Power, MeitY) and the IEA. IEA, <em>Energy and AI</em> (2025) and the IEA Energy and AI Observatory. Google 2025 Environmental Report (fuel-efficient routing estimate).</p>
     <p><strong>Method note.</strong> Per the casebook's disclaimer, case-study figures are self-reported by the deploying organisations and were screened, not independently audited. Session premises ("who pays" mechanisms) are the framing supplied for this board's review, not IEA findings. Data-centre and savings projections are IEA analysis.</p>
     <p>Prepared as an evidence briefing for the IRB · Energy session, 12 August · Palais des Nations. Expected output: Fair Energy and Public-Benefit Principles for AI Infrastructure.</p>
+    <p><strong>AI for Public Good</strong> supports the aims of SDG 7 (affordable and clean energy), SDG 9 (industry, innovation and infrastructure) and SDG 13 (climate action). It is an independent, open initiative and is not affiliated with or endorsed by the United Nations, the IEA, or the Government of India.</p>
     <p>Presenter tip: keys <strong>1–6</strong> jump between sections.</p>
   </div>
 </footer>
