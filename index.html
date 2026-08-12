@@ -48,11 +48,6 @@
   .wrap{max-width:1060px;margin:0 auto;padding:0 1.25rem}
 
   .brand-rule{height:3px;background:linear-gradient(90deg,var(--adds) 0%,var(--adds) 42%,var(--rem) 58%,var(--rem) 100%)}
-  .masthead{padding:.8rem 0;border-bottom:1px solid var(--line)}
-  .masthead .wm{font-family:var(--mono);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);font-weight:600}
-  .masthead .wm b{color:var(--rem-ink);font-weight:600}
-  .masthead .mt-right{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
-  @media (max-width:560px){.masthead .mt-right{display:none}}
 
   .uvp-band{border-bottom:1px solid var(--line);background:var(--surface);padding:2.6rem 0}
   .uvp-line{font-family:var(--serif);font-weight:600;font-size:clamp(1.25rem,2.6vw,1.7rem);line-height:1.3;max-width:34ch;margin:0 0 1.6rem;text-wrap:balance}
@@ -69,25 +64,48 @@
   .aud-row span{font-size:.82rem;color:var(--ink2)}
   .aud-row span b{color:var(--ink);font-weight:600}
 
-  .hero-stage{height:200vh;--p:0;border-bottom:1px solid var(--line)}
-  header.hero{position:sticky;top:0;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:2rem 0}
-  header.hero .wrap{width:100%}
-  h1 .adds-w{opacity:calc(1 - var(--p)*0.62)}
-  h1 .rem-w{opacity:calc(0.38 + var(--p)*0.62)}
-  .hero .tile.rem{opacity:calc(0.72 + var(--p)*0.28);transform:scale(calc(0.975 + var(--p)*0.025))}
-  .hero .tile.adds{opacity:calc(1 - var(--p)*0.18)}
-  .load-meter{display:flex;gap:3px;height:6px;margin:0 0 2rem;max-width:560px}
-  .load-meter .lm-adds{background:var(--adds);border-radius:3px;width:calc(78% - var(--p)*56%)}
-  .load-meter .lm-rem{background:var(--rem);border-radius:3px;width:calc(22% + var(--p)*56%)}
-  .lm-cap{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:flex;justify-content:space-between;max-width:560px;margin:.45rem 0 1.6rem}
-  .scroll-cue{position:absolute;left:50%;bottom:1.2rem;transform:translateX(-50%);font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);opacity:calc(1 - var(--p)*4)}
-  @media (max-width:680px){.hero-stage{height:165vh}}
+  /* cinematic hero */
+  .cine{position:relative;min-height:100vh;background:#0B120F;color:#E8EEEA;overflow:hidden;display:flex;flex-direction:column}
+  .cine canvas{position:absolute;inset:0;width:100%;height:100%}
+  .cine-top{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem}
+  .cine-top .wm{font-family:var(--mono);font-size:.76rem;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#E8EEEA}
+  .cine-top .wm b{color:#4FC7A8;font-weight:600}
+  .skip-btn{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;padding:.45rem .95rem;border-radius:999px;border:1px solid rgba(232,238,234,.25);background:rgba(11,18,15,.5);color:#E8EEEA;cursor:pointer}
+  .skip-btn:hover{border-color:rgba(232,238,234,.55)}
+  .skip-btn:focus-visible{outline:2px solid #4FC7A8;outline-offset:2px}
+  .cine-stage{position:relative;z-index:2;flex:1;display:flex;align-items:center;padding:2rem 0 5.5rem}
+  .cine .cond{font-family:"Avenir Next Condensed","Helvetica Neue Condensed","Arial Narrow","Roboto Condensed",var(--sans);font-weight:800;text-transform:uppercase;line-height:.95;letter-spacing:.005em}
+  .cine-intro{position:absolute;inset:0;z-index:3;display:flex;align-items:center;pointer-events:none}
+  .cine-intro .line{font-size:clamp(1.9rem,5.2vw,3.9rem);max-width:20ch;opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .cine-intro .line.on{opacity:1;transform:none}
+  .cine-intro .ts{color:#E09A50}
+  .cine-intro .line.teal .ts{color:#4FC7A8}
+  .cine-main{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s ease}
+  .cine.done .cine-main{opacity:1;transform:none}
+  .cine.done .cine-intro{display:none}
+  .cine-eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:#8FA69C;margin:0 0 1.1rem}
+  .cine-h1{font-size:clamp(2.7rem,7.5vw,5.6rem);margin:0 0 1.2rem;max-width:15ch;color:#F2F6F3}
+  .cine-h1 .aw{color:#E09A50}
+  .cine-h1 .rw{color:#4FC7A8}
+  .cine-sub{font-size:clamp(.95rem,1.6vw,1.1rem);color:#B9C6BF;max-width:52ch;margin:0 0 1.8rem;line-height:1.6}
+  .cine-sub strong{color:#E8EEEA}
+  .cine-ctas{display:flex;gap:.7rem;flex-wrap:wrap}
+  .cta-p{font-family:var(--mono);font-size:.82rem;padding:.85rem 1.4rem;border-radius:9px;background:linear-gradient(100deg,#3AAE8F,#4FC7A8);color:#07211A;text-decoration:none;font-weight:600;border:none}
+  .cta-p:hover{filter:brightness(1.07)}
+  .cta-s{font-family:var(--mono);font-size:.82rem;padding:.85rem 1.4rem;border-radius:9px;border:1px solid rgba(232,238,234,.28);color:#E8EEEA;text-decoration:none;background:rgba(11,18,15,.35)}
+  .cta-s:hover{border-color:rgba(232,238,234,.6)}
+  .cta-p:focus-visible,.cta-s:focus-visible{outline:2px solid #4FC7A8;outline-offset:2px}
+  .cine-hud{position:absolute;z-index:2;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;padding:1.1rem 1.5rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:#7E958B;pointer-events:none}
+  .cine-hud .hud-l span,.cine-hud .hud-r span{display:block;margin-top:.25rem}
+  .cine-hud .hud-r{text-align:right}
+  .cine-hud b{color:#CBD8D2;font-weight:600}
+  .cine-cue{position:absolute;left:50%;bottom:1.1rem;transform:translateX(-50%);z-index:2;font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:#7E958B;animation:cueDrift 2.4s ease-in-out infinite}
+  @keyframes cueDrift{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+  @media (max-width:700px){.cine-hud .hud-r{display:none}}
   @media (prefers-reduced-motion: reduce){
-    .hero-stage{height:auto}
-    header.hero{position:static;min-height:0;padding:3.5rem 0 2.5rem}
-    h1 .adds-w,h1 .rem-w,.hero .tile.adds,.hero .tile.rem{opacity:1;transform:none}
-    .load-meter .lm-adds{width:50%}.load-meter .lm-rem{width:50%}
-    .scroll-cue{display:none}
+    .cine-main{opacity:1;transform:none}
+    .cine-intro{display:none}
+    .cine-cue{animation:none}
   }
   .eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem}
   h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,4.5vw,3.1rem);line-height:1.12;margin:0 0 1rem;text-wrap:balance;max-width:21ch}
@@ -326,9 +344,10 @@
   @keyframes flash{0%{background:var(--rem-soft)}100%{background:var(--surface)}}
 
   @media print{
-    nav.toc,.filters,.results-note,.actions,.card details,.return-pill,.snav,.para,.wipe,.wipe-hint,.scroll-cue{display:none!important}
-    .hero-stage{height:auto}
-    header.hero{position:static;min-height:0}
+    nav.toc,.filters,.results-note,.actions,.card details,.return-pill,.snav,.para,.wipe,.wipe-hint,.cine canvas,.cine-hud,.cine-cue,.cine-ctas,.skip-btn,.cine-intro{display:none!important}
+    .cine{min-height:0;background:#fff;color:#111}
+    .cine-h1{color:#111}
+    .cine-main{opacity:1;transform:none}
     .card{opacity:1!important}
     .cards{display:grid;grid-auto-flow:row;grid-template-columns:repeat(2,1fr);overflow:visible}
     body{background:#fff;color:#111}
@@ -340,35 +359,31 @@
 </style>
 
 <div class="brand-rule" aria-hidden="true"></div>
-<div class="masthead"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;width:100%">
-  <span class="wm">AI for <b>Public Good</b></span>
-  <span class="mt-right">Open evidence &amp; tools · ai4publicgood.com</span>
-</div></div>
 
-<div class="hero-stage" id="heroStage">
-<header class="hero">
-  <div class="wrap">
-    <p class="eyebrow">AI and climate change · Who pays for big AI's energy demand?</p>
-    <h1>The kind of AI that <span class="adds-w">adds load</span> — and the kind that <span class="rem-w">removes it</span>.</h1>
-    <p class="lede">The AI conversation is dominated by the electricity that hyperscale data centres will consume. But there is a second, documented story: AI already deployed <strong>inside</strong> the energy system is measurably cutting demand, waste and emissions. This briefing sets both sides of the ledger, then derives <strong>Fair Energy and Public-Benefit Principles for AI Infrastructure</strong> from the evidence.</p>
-    <div class="load-meter" aria-hidden="true"><div class="lm-adds"></div><div class="lm-rem"></div></div>
-    <div class="lm-cap" aria-hidden="true"><span>load added</span><span>load removed</span></div>
-    <div class="hero-stats">
-      <div class="tile adds">
-        <div class="k">The load AI adds</div>
-        <div class="v">≈ Japan</div>
-        <p class="d">IEA analysis projects global data-centre electricity use could <strong>double by 2030</strong> — by then consuming as much electricity in a year as Japan does today.</p>
-      </div>
-      <div class="tile rem">
-        <div class="k">The load AI can remove</div>
-        <div class="v">&gt; 13 EJ / yr</div>
-        <p class="d">Widespread adoption of already-commercial AI optimisations could save over <strong>13 exajoules a year by 2035</strong> — more than Indonesia's entire annual energy consumption (IEA, <em>Energy and AI</em>, 2025).</p>
+<header class="cine" id="cine">
+  <canvas id="gridCanvas" aria-hidden="true"></canvas>
+  <div class="cine-top">
+    <span class="wm">AI for <b>Public Good</b></span>
+    <button class="skip-btn" id="skipIntro" type="button">Skip intro →</button>
+  </div>
+  <div class="cine-intro" id="cineIntro"><div class="wrap"><p class="line cond" id="introLine"></p></div></div>
+  <div class="cine-stage">
+    <div class="wrap cine-main" id="cineMain">
+      <p class="cine-eyebrow">AI and climate change · Who pays for big AI's energy demand?</p>
+      <h1 class="cine-h1 cond">The kind of AI that <span class="aw">adds load.</span> And the kind that <span class="rw">removes it.</span></h1>
+      <p class="cine-sub">Hyperscale AI is on track to draw <strong>a Japan's worth of electricity by 2030</strong> — while AI already deployed inside the energy system could remove <strong>more than an Indonesia's worth by 2035</strong>. Evidence, a digital twin, and a term sheet: the first open tool that turns that gap into a <strong>fair, auditable deal</strong>.</p>
+      <div class="cine-ctas">
+        <a class="cta-p" href="#twin">⚡ Run the digital twin</a>
+        <a class="cta-s" href="#evidence">See the evidence</a>
       </div>
     </div>
   </div>
-  <div class="scroll-cue">scroll ▾</div>
+  <div class="cine-hud" aria-hidden="true">
+    <div class="hud-l"><span>DC load by 2030 <b>≈ Japan — IEA</b></span><span>Removable by 2035 <b>&gt; 13 EJ/yr — IEA</b></span></div>
+    <div class="hud-r"><span><b>27 deployments</b> · 4 continents</span><span>IEA casebook · CC BY 4.0</span></div>
+  </div>
+  <div class="cine-cue">scroll ▾</div>
 </header>
-</div>
 
 <nav class="toc" aria-label="Sections">
   <div class="wrap">
@@ -1149,6 +1164,105 @@ if($('inMW')){
   });
   twinRender();
 }
+
+/* cinematic hero — night-grid simulation + intro sequencer */
+(function(){
+  const cine=$('cine'), cv=$('gridCanvas'); if(!cine||!cv) return;
+  const ctx=cv.getContext('2d');
+  let W=0,H=0,cell=64,streetsX=[],streetsY=[],windows=[],parts=[],dc={},running=true,t0=performance.now();
+  function build(){
+    W=cv.width=cine.clientWidth; H=cv.height=cine.clientHeight;
+    cell=Math.max(54,Math.min(84,W/18));
+    streetsX=[];streetsY=[];windows=[];parts=[];
+    for(let x=cell/2;x<W;x+=cell) streetsX.push(x);
+    for(let y=cell/2;y<H;y+=cell) streetsY.push(y);
+    dc={x:W*0.72,y:H*0.30,w:cell*2.4,h:cell*1.7};
+    for(let i=0;i<Math.min(240,W*H/6000);i++){
+      windows.push({x:Math.random()*W*0.62,y:Math.random()*H, on:Math.random()<0.25, at:2000+Math.random()*14000});
+    }
+    for(let i=0;i<90;i++) parts.push(spawn(Math.random()<0.5));
+    ctx.fillStyle='#0B120F'; ctx.fillRect(0,0,W,H);
+  }
+  function snap(v,arr){let b=arr[0],d=1e9;for(const a of arr){const dd=Math.abs(a-v);if(dd<d){d=dd;b=a;}}return b;}
+  function spawn(amber){
+    if(amber){
+      const fromLeft=Math.random()<0.7;
+      const y=snap(dc.y+Math.random()*dc.h,streetsY);
+      return {amber:true,x:fromLeft?-10:Math.random()*W*0.4,y,vx:0.55+Math.random()*0.5,vy:0,life:1};
+    }
+    const x=snap(Math.random()*W*0.6,streetsX);
+    return {amber:false,x,y:H+10,vx:0,vy:-(0.35+Math.random()*0.4),life:1};
+  }
+  function frame(now){
+    if(!running){requestAnimationFrame(frame);return;}
+    const el=now-t0;
+    ctx.fillStyle='rgba(11,18,15,0.16)'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(110,150,135,0.07)'; ctx.lineWidth=1;
+    ctx.beginPath();
+    streetsX.forEach(x=>{ctx.moveTo(x,0);ctx.lineTo(x,H);});
+    streetsY.forEach(y=>{ctx.moveTo(0,y);ctx.lineTo(W,y);});
+    ctx.stroke();
+    windows.forEach(w=>{
+      if(!w.on && el>w.at) w.on=true;
+      if(w.on){ ctx.fillStyle='rgba(232,201,125,'+(0.25+0.15*Math.sin(el/900+w.x))+')'; ctx.fillRect(w.x,w.y,2.5,2.5); }
+    });
+    const pulse=0.5+0.5*Math.sin(el/700);
+    ctx.strokeStyle='rgba(224,154,80,'+(0.5+0.3*pulse)+')'; ctx.lineWidth=1.5;
+    ctx.strokeRect(dc.x,dc.y,dc.w,dc.h);
+    ctx.fillStyle='rgba(224,154,80,'+(0.05+0.05*pulse)+')'; ctx.fillRect(dc.x,dc.y,dc.w,dc.h);
+    ctx.fillStyle='rgba(224,154,80,0.75)';
+    ctx.font='9px monospace'; ctx.fillText('DATA CENTRE — FIRM LOAD',dc.x,dc.y-7);
+    parts.forEach((p,i)=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.amber){
+        if(p.x>dc.x-4&&p.y>dc.y&&p.y<dc.y+dc.h){parts[i]=spawn(true);return;}
+        if(p.x>W+12){parts[i]=spawn(true);return;}
+        ctx.fillStyle='rgba(224,154,80,0.85)';
+      }else{
+        p.life-=0.004;
+        if(p.y<-12||p.life<=0){parts[i]=spawn(false);return;}
+        ctx.fillStyle='rgba(79,199,168,'+(0.8*p.life)+')';
+      }
+      ctx.fillRect(p.x-1.2,p.y-1.2,2.4,2.4);
+    });
+    requestAnimationFrame(frame);
+  }
+  build();
+  addEventListener('resize',()=>build(),{passive:true});
+  new IntersectionObserver(es=>{running=es[0].isIntersecting;},{threshold:0}).observe(cine);
+  if(!RM) requestAnimationFrame(frame);
+  else { ctx.fillStyle='#0B120F'; ctx.fillRect(0,0,W,H); }
+
+  /* intro sequencer */
+  const LINES=[
+    {ts:'18:58.',txt:' The city eases toward evening.',teal:false},
+    {ts:'19:00.',txt:' The peak begins. A data centre draws on — flat, firm, indifferent.',teal:false},
+    {ts:'19:02.',txt:' Fifty thousand buildings just trimmed their load. Nobody noticed. That’s the point.',teal:true}
+  ];
+  const introEl=$('cineIntro'), lineEl=$('introLine'), skip=$('skipIntro');
+  let seq=[],done=false;
+  function finish(){
+    if(done) return; done=true;
+    seq.forEach(clearTimeout);
+    cine.classList.add('done');
+    skip.style.display='none';
+    try{sessionStorage.setItem('cineSeen','1');}catch(e){}
+  }
+  skip.addEventListener('click',finish);
+  let seen=false; try{seen=!!sessionStorage.getItem('cineSeen');}catch(e){}
+  if(RM||seen){ finish(); }
+  else{
+    LINES.forEach((l,i)=>{
+      seq.push(setTimeout(()=>{
+        lineEl.className='line cond'+(l.teal?' teal':'');
+        lineEl.innerHTML='<span class="ts">'+l.ts+'</span>'+l.txt.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+        void lineEl.offsetWidth; lineEl.classList.add('on');
+      }, i*2600));
+      seq.push(setTimeout(()=>lineEl.classList.remove('on'), i*2600+2250));
+    });
+    seq.push(setTimeout(finish, LINES.length*2600+300));
+  }
+})();
 
 /* staggered card entrance */
 const allCards=[...document.querySelectorAll('.card')];
